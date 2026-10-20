@@ -2,7 +2,7 @@
 
 Fearnot 的個人網站與履歷，以 Astro、TypeScript 和原生 CSS 建置，部署於 GitHub Pages。
 
-**[瀏覽網站](https://fearnot.tw/) · [English](https://fearnot.tw/en/) · [履歷](https://fearnot.tw/resume/)
+**[瀏覽網站](https://fearnot.tw/) · [English](https://fearnot.tw/en/) · [履歷](https://fearnot.tw/resume/)**
 
 ## 功能與頁面
 
