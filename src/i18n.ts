@@ -15,11 +15,6 @@ export const ui = {
   language: { zh: "語言", en: "Language" },
   docs: { zh: "履歷文件", en: "Résumé documents" },
   skip: { zh: "跳到主要內容", en: "Skip to content" },
-  nowPlaying: { zh: "正在播放", en: "Now playing" },
-  pause: { zh: "暫停", en: "Pause" },
-  play: { zh: "播放", en: "Play" },
-  next: { zh: "下一首", en: "Next track" },
-  bias: { zh: "本命 Winter", en: "bias: Winter" },
 } satisfies Record<string, Record<Lang, string>>;
 
 /** "/resume/" <-> "/en/resume/"; the zh site lives at the root. Paths keep their trailing slash (directory index). */

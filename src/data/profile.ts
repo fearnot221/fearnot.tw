@@ -268,17 +268,6 @@ export const roles: Item[] = [
   { title: { zh: "113 學年度鳳山高中學生代表", en: "Student representative, Fengshan High School (2024–25)" } },
 ];
 
-/** The footer's "now playing" card: it rotates through these and only looks like it plays (no audio).
- *  `art` is a file in src/assets/covers/ (192×192 artwork from the iTunes Search API). */
-export const playlist: { title: string; artist: string; album: string; duration: number; art: string }[] = [
-  { title: "Spark (WINTER Solo)", artist: "aespa", album: "SYNK : PARALLEL LINE", duration: 201, art: "spark.jpg" },
-  { title: "Whiplash", artist: "aespa", album: "Whiplash", duration: 183, art: "whiplash.jpg" },
-  { title: "Supernova", artist: "aespa", album: "Supernova", duration: 178, art: "supernova.jpg" },
-  { title: "Dirty Work", artist: "aespa", album: "Dirty Work", duration: 180, art: "dirty-work.jpg" },
-  { title: "Drama", artist: "aespa", album: "Drama", duration: 214, art: "drama.jpg" },
-  { title: "Next Level", artist: "aespa", album: "Next Level", duration: 221, art: "next-level.jpg" },
-];
-
 /** Footer strip of Winter GIFs (square files in public/). Empty = that many reserved frames are shown. */
 export const footerGifs: string[] = []; // TODO: e.g. ["/winter-1.gif", "/winter-2.gif"]
 export const reservedGifSlots = 3;

@@ -11,7 +11,6 @@ Fearnot 的個人網站與履歷，以 Astro、TypeScript 和原生 CSS 建置�
 - A4 履歷、列印樣式與兩種語言的 PDF 下載。
 - 靜態 Open Graph 分享圖片、canonical、hreflang、JSON-LD 與 sitemap。
 - 自行託管的 WOFF2 子集字型與建置時圖片最佳化。
-- 頁尾歌單展示與播放進度動畫；不會播放音訊，也未串接音樂服務。
 
 | 路徑                                       | 內容                             |
 | ------------------------------------------ | -------------------------------- |
@@ -57,14 +56,13 @@ npx playwright install chromium
 
 ```text
 src/
-  data/profile.ts       個人資料、經歷、專案、技能與歌單
+  data/profile.ts       個人資料、經歷、專案與技能
   i18n.ts               介面翻譯與語言路徑
   seo.ts                JSON-LD 結構化資料
   pages/                首頁、履歷、樣式參考與分享圖片渲染頁
-  components/           共用頁面內容、語言／主題切換與歌單
+  components/           共用頁面內容與語言／主題切換
   layouts/Base.astro    HTML 外框、SEO metadata 與主題初始化
   styles/               設計 tokens 與共用樣式
-  assets/covers/        歌單封面原圖
 public/
   fonts/                已提交的字型子集
   pdf/                  已產生的履歷 PDF
@@ -118,6 +116,6 @@ scripts/
 
 ## 素材與授權
 
-來源字型為 Google Fonts 的 Literata、Fragment Mono、Noto Serif TC，採 SIL Open Font License；來源與授權請參閱 [Google Fonts 儲存庫](https://github.com/google/fonts/tree/main/ofl)。歌單封面與其他第三方素材的權利屬於各自權利人。
+來源字型為 Google Fonts 的 Literata、Fragment Mono、Noto Serif TC，採 SIL Open Font License；來源與授權請參閱 [Google Fonts 儲存庫](https://github.com/google/fonts/tree/main/ofl)。第三方素材的權利屬於各自權利人。
 
 本專案目前未提供程式碼授權條款；若要重用程式碼、個人資料或設計，請先聯絡作者。

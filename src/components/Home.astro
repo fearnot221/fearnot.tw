@@ -2,7 +2,6 @@
 import Base from "../layouts/Base.astro";
 import LangSwitch from "./LangSwitch.astro";
 import ThemeToggle from "./ThemeToggle.astro";
-import NowPlaying from "./NowPlaying.astro";
 import { getImage } from "astro:assets";
 import { person, experience, awards, certifications, projects, footerGifs, reservedGifSlots, type Lang } from "../data/profile";
 import { ui, pathFor } from "../i18n";
@@ -91,7 +90,6 @@ const links = [{ label: person.email, href: `mailto:${person.email}` }, ...perso
           : Array.from({ length: reservedGifSlots }, () => <li class="frame" aria-hidden="true"></li>)}
       </ul>
       <span class="copy">© 2026 Fearnot</span>
-      <NowPlaying lang={lang} />
     </footer>
   </div>
 </Base>
