@@ -79,6 +79,13 @@ async function source(path) {
   return readFile(file);
 }
 
+// Deploy servers have no .fonts-cache: rather than download ~30 MB per build (and fail when GitHub
+// is slow), keep the committed public/fonts, which a local `npm run build` already narrowed.
+if (FROM_DIST && fonts.some((f) => !existsSync(join(CACHE, f.src.split("/").pop())))) {
+  console.log("fonts: no local source cache, keeping committed subsets in public/fonts");
+  process.exit(0);
+}
+
 await mkdir(CACHE, { recursive: true });
 await mkdir(OUT, { recursive: true });
 for (const f of fonts) {

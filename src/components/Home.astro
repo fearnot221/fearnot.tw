@@ -13,7 +13,10 @@ const { lang } = Astro.props;
 const onResume = <X extends { resume?: boolean }>(xs: X[]) => xs.filter((x) => x.resume);
 const honors = [...onResume(awards), ...onResume(certifications)];
 // fetched from Gravatar at build time and served from this site as a small webp
-const avatar = person.avatar ? await getImage({ src: person.avatar, width: 144, height: 144, densities: [1, 2], format: "webp", quality: 80 }) : undefined;
+// Astro fetches remote images late in the build and fails it on a 404, so check first:
+// an unreachable or missing Gravatar falls back to the empty frame instead of breaking the deploy
+const reachable = person.avatar && (await fetch(person.avatar, { method: "HEAD" }).then((r) => r.ok, () => false));
+const avatar = reachable ? await getImage({ src: person.avatar!, width: 144, height: 144, densities: [1, 2], format: "webp", quality: 80 }) : undefined;
 const links = [{ label: person.email, href: `mailto:${person.email}` }, ...person.links.map((l) => ({ label: l.label, href: l.href }))];
 ---
 <Base title={`Fearnot — ${person.roles[lang]}`} description={person.lede[lang]} lang={lang} path="/" ogImage={`/og/home-${lang}.png`} jsonld={homeLd(lang)}>
