@@ -1,10 +1,8 @@
 # fearnot.tw
 
-[![Deploy to GitHub Pages](https://github.com/fearnot221/fearnot.tw/actions/workflows/deploy.yml/badge.svg)](https://github.com/fearnot221/fearnot.tw/actions/workflows/deploy.yml)
+Fearnot 的個人網站與履歷，以 Astro、TypeScript 和原生 CSS 建置，部署於 GitHub Pages。
 
-Fearnot（盧明澤）的個人網站與履歷，以 Astro、TypeScript 和原生 CSS 建置，部署於 GitHub Pages。
-
-**[瀏覽網站](https://fearnot.tw/) · [English](https://fearnot.tw/en/) · [履歷](https://fearnot.tw/resume/) · [部署紀錄](https://github.com/fearnot221/fearnot.tw/actions/workflows/deploy.yml)**
+**[瀏覽網站](https://fearnot.tw/) · [English](https://fearnot.tw/en/) · [履歷](https://fearnot.tw/resume/)
 
 ## 功能與頁面
 
@@ -15,13 +13,13 @@ Fearnot（盧明澤）的個人網站與履歷，以 Astro、TypeScript 和原�
 - 自行託管的 WOFF2 子集字型與建置時圖片最佳化。
 - 頁尾歌單展示與播放進度動畫；不會播放音訊，也未串接音樂服務。
 
-| 路徑 | 內容 |
-| --- | --- |
-| `/`、`/en/` | 中文／英文首頁 |
-| `/resume/`、`/en/resume/` | 中文／英文履歷 |
-| `/pdf/resume-zh.pdf`、`/pdf/resume-en.pdf` | 可下載的履歷 PDF |
-| `/styleguide/` | 設計樣式參考頁，設為 `noindex` |
-| `/og/{home,resume}-{zh,en}/` | 分享圖片的渲染頁，設為 `noindex` |
+| 路徑                                       | 內容                             |
+| ------------------------------------------ | -------------------------------- |
+| `/`、`/en/`                                | 中文／英文首頁                   |
+| `/resume/`、`/en/resume/`                  | 中文／英文履歷                   |
+| `/pdf/resume-zh.pdf`、`/pdf/resume-en.pdf` | 可下載的履歷 PDF                 |
+| `/styleguide/`                             | 設計樣式參考頁，設為 `noindex`   |
+| `/og/{home,resume}-{zh,en}/`               | 分享圖片的渲染頁，設為 `noindex` |
 
 ## 本機開發
 
@@ -36,15 +34,15 @@ npm run dev
 
 依終端機輸出的網址開啟網站（通常為 `http://localhost:4321`）。首次啟動會從 Google Fonts 的 GitHub 儲存庫下載來源字型至 `.fonts-cache/`，需要網路連線；之後會使用快取。
 
-| 指令 | 用途 |
-| --- | --- |
-| `npm run dev` | 更新開發用字型子集並啟動開發伺服器 |
-| `npm run check` | 檢查 Astro 與 TypeScript |
-| `npm run build` | 輸出靜態網站至 `dist/`，並更新正式字型子集 |
-| `npm run preview` | 預覽 `dist/` 的正式建置 |
-| `npm run fonts` | 下載／快取字型來源，依原始碼重建字型子集 |
-| `npm run assets` | 先建置，再以 Chromium 產生兩份 PDF 與四張分享圖片 |
-| `npm run audit` | 先建置，再執行 axe 無障礙檢查與 Lighthouse |
+| 指令              | 用途                                              |
+| ----------------- | ------------------------------------------------- |
+| `npm run dev`     | 更新開發用字型子集並啟動開發伺服器                |
+| `npm run check`   | 檢查 Astro 與 TypeScript                          |
+| `npm run build`   | 輸出靜態網站至 `dist/`，並更新正式字型子集        |
+| `npm run preview` | 預覽 `dist/` 的正式建置                           |
+| `npm run fonts`   | 下載／快取字型來源，依原始碼重建字型子集          |
+| `npm run assets`  | 先建置，再以 Chromium 產生兩份 PDF 與四張分享圖片 |
+| `npm run audit`   | 先建置，再執行 axe 無障礙檢查與 Lighthouse        |
 
 `assets` 與 `audit` 需要 Playwright Chromium，首次使用前執行：
 
@@ -111,10 +109,10 @@ scripts/
 
 根網域 DNS 指向 GitHub Pages：
 
-| 類型 | 名稱 | 值（每個位址各一筆記錄） |
-| --- | --- | --- |
-| A | `@` | `185.199.108.153`、`185.199.109.153`、`185.199.110.153`、`185.199.111.153` |
-| AAAA | `@` | `2606:50c0:8000::153`、`2606:50c0:8001::153`、`2606:50c0:8002::153`、`2606:50c0:8003::153` |
+| 類型 | 名稱 | 值（每個位址各一筆記錄）                                                                   |
+| ---- | ---- | ------------------------------------------------------------------------------------------ |
+| A    | `@`  | `185.199.108.153`、`185.199.109.153`、`185.199.110.153`、`185.199.111.153`                 |
+| AAAA | `@`  | `2606:50c0:8000::153`、`2606:50c0:8001::153`、`2606:50c0:8002::153`、`2606:50c0:8003::153` |
 
 變更網域時，也需要同步更新 `astro.config.mjs`、`public/robots.txt`、分享圖片渲染頁中的網域文字與本文件，並重新產生分享圖片。
 
