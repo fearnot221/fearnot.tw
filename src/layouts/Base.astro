@@ -1,0 +1,79 @@
+---
+import "../styles/global.css";
+import type { Lang } from "../data/profile";
+import { htmlLang, pathFor, ui } from "../i18n";
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+  /** language-neutral path, e.g. "/" or "/resume" */
+  path: string;
+  /** e.g. "/og/home-zh.png" */
+  ogImage?: string;
+  jsonld?: object;
+  noindex?: boolean;
+  /** "paper" pins the white Resume/CV palette; otherwise the visitor's theme applies */
+  theme?: "paper";
+}
+const { title, description, lang, path, ogImage, jsonld, noindex = false, theme } = Astro.props;
+const site = Astro.site!;
+const url = (l: Lang) => new URL(pathFor(l, path), site).href;
+const ogLocale = { zh: "zh_TW", en: "en_US" } as const;
+---
+<!doctype html>
+<html lang={htmlLang[lang]} data-theme={theme}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {theme === "paper" ? (
+    <>
+      <meta name="color-scheme" content="light" />
+      <meta name="theme-color" content="#ffffff" />
+    </>
+  ) : (
+    <>
+      <meta name="color-scheme" content="dark light" />
+      <meta name="theme-color" content="#121413" media="(prefers-color-scheme: dark)" />
+      <meta name="theme-color" content="#f3f1ea" media="(prefers-color-scheme: light)" />
+      {/* apply a saved choice before first paint, so the page never flashes the other theme */}
+      <script is:inline>try { const t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch {}</script>
+    </>
+  )}
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  {noindex ? <meta name="robots" content="noindex" /> : (
+    <>
+      <link rel="canonical" href={url(lang)} />
+      <link rel="alternate" hreflang="zh-Hant-TW" href={url("zh")} />
+      <link rel="alternate" hreflang="en" href={url("en")} />
+      <link rel="alternate" hreflang="x-default" href={url("zh")} />
+      <meta property="og:type" content="profile" />
+      <meta property="og:site_name" content="Fearnot" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={url(lang)} />
+      <meta property="og:locale" content={ogLocale[lang]} />
+      <meta property="og:locale:alternate" content={ogLocale[lang === "zh" ? "en" : "zh"]} />
+      {ogImage && (
+        <>
+          <meta property="og:image" content={new URL(ogImage, site).href} />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta property="og:image:alt" content={title} />
+          <meta name="twitter:card" content="summary_large_image" />
+        </>
+      )}
+    </>
+  )}
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <link rel="preload" href="/fonts/literata.woff2" as="font" type="font/woff2" crossorigin />
+  <slot name="head" />
+  {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
+</head>
+<body>
+  <a class="skip mono" href="#main">{ui.skip[lang]}</a>
+  <slot />
+</body>
+</html>

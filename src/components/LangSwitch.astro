@@ -1,0 +1,11 @@
+---
+import type { Lang } from "../data/profile";
+import { pathFor, ui } from "../i18n";
+
+interface Props { lang: Lang; path: string }
+const { lang, path } = Astro.props;
+---
+<nav class="lang mono" aria-label={ui.language[lang]}>
+  <a href={pathFor("zh", path)} hreflang="zh-Hant-TW" lang="zh-Hant-TW" aria-current={lang === "zh" ? "true" : undefined}>中</a>
+  <a href={pathFor("en", path)} hreflang="en" lang="en" aria-current={lang === "en" ? "true" : undefined}>EN</a>
+</nav>

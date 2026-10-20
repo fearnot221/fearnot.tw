@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "astro", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "--", "--port", "4321"], "port": 4321 },
+    { "name": "prototypes", "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "4410", "-d", "prototypes"], "port": 4410 }
+  ]
+}

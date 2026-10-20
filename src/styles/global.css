@@ -1,0 +1,132 @@
+@layer reset, tokens, base, layout, components, utilities;
+
+@import "./tokens.css";
+
+@font-face { font-family: "Literata"; src: url("/fonts/literata.woff2") format("woff2"); font-weight: 400 600; font-display: swap; }
+@font-face { font-family: "Literata Display"; src: url("/fonts/literata-display.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Fragment Mono"; src: url("/fonts/fragment-mono.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+/* the CJK serif is the largest file: "optional" means a late arrival never repaints or shifts the page (it is cached for the next view) */
+@font-face { font-family: "Noto Serif TC"; src: url("/fonts/noto-serif-tc-400.woff2") format("woff2"); font-weight: 400; font-display: optional; }
+@font-face { font-family: "Noto Serif TC"; src: url("/fonts/noto-serif-tc-600.woff2") format("woff2"); font-weight: 600; font-display: optional; }
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  ul, ol { list-style: none; }
+  img, svg { display: block; max-width: 100%; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+}
+
+@layer base {
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font: 400 var(--step-0) / var(--leading-zh) var(--font-serif);
+    letter-spacing: var(--tracking-zh);
+    font-kerning: normal;
+    text-autospace: normal;          /* space between CJK and Latin, no hand-typed spaces */
+    text-spacing-trim: trim-start;   /* compress leading full-width punctuation */
+    line-break: strict;
+    -webkit-font-smoothing: antialiased;
+  }
+  :root:lang(en) body { line-height: var(--leading-en); letter-spacing: 0; }
+  ::selection { background: var(--color-selection); }
+
+  a {
+    color: inherit;
+    text-decoration: underline 1px var(--color-text-muted);
+    text-underline-offset: .28em;
+    transition: color var(--dur-1), text-decoration-color var(--dur-1);
+  }
+  a:hover { color: var(--color-accent); text-decoration-color: var(--color-accent); }
+
+  :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; border-radius: var(--radius); }
+
+  /* bilingual copy sits side by side; the root lang decides which is shown */
+  :root:lang(en) .zh, :root:not(:lang(en)) .en { display: none; }
+}
+
+@layer layout {
+  .page { max-width: calc(var(--measure) + 2 * var(--gutter)); margin-inline: auto; padding: var(--space-3) var(--gutter) var(--space-4); }
+  /* one column, read top to bottom: section heading, then its entries */
+  .section { position: relative; padding-block: var(--section); }
+}
+
+@layer components {
+  .mono { font-family: var(--font-mono); font-size: var(--step--1); letter-spacing: var(--tracking-mono); line-height: 1.6; }
+
+  .label { font: 600 var(--step-2) / 1.3 var(--font-serif); color: var(--color-text-strong); margin-bottom: var(--space-3); }
+
+  .doc { display: inline-block; text-decoration: none; border: var(--border); border-radius: var(--radius); padding: .35rem .75rem; transition: border-color var(--dur-2), color var(--dur-2); }
+  .doc:hover { border-color: var(--color-accent); }
+
+  .lang { display: flex; gap: .15rem; }
+  .lang :is(a, button) { color: var(--color-text-muted); text-decoration: none; padding: .35rem .4rem; transition: color var(--dur-1); }
+  .lang :is(a, button):hover { color: var(--color-text); }
+  .lang :is([aria-current="true"], [aria-pressed="true"]) { color: var(--color-text); text-decoration: underline 1px var(--color-accent); text-underline-offset: .35em; }
+
+  .top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-2); }
+  .top .home { text-decoration: none; }
+  .status { display: inline-block; width: .5em; height: .5em; margin-right: .6em; background: var(--color-accent); vertical-align: .05em; }
+  .top a, .top button { white-space: nowrap; }
+  @media (max-width: 420px) { .actions { gap: var(--space-2); } .top .doc { padding-inline: .55rem; } .top .wide { display: none; } }
+  .actions { display: flex; align-items: center; gap: var(--space-3); }
+  .docs { display: flex; gap: var(--space-1); }
+  .prefs { display: flex; align-items: center; gap: .25rem; }
+
+
+  .entries > li { padding-block: var(--space-3); }
+  .entries > li + li { border-top: var(--border); }
+  .entries > li:first-child { padding-top: 0; }
+  .entries > li:last-child { padding-bottom: 0; }
+  .entries .when { display: block; color: var(--color-text-muted); margin-bottom: .2rem; }
+  .entries h3 { font: 600 var(--step-1) / 1.5 var(--font-serif); }
+  .entries .org { display: inline-block; color: var(--color-text-muted); font-weight: 400; } /* an org name wraps as a unit, never mid-name; the plain space before it vanishes at a wrap */
+  .entries p { color: var(--color-text-muted); margin-top: .25rem; text-wrap: pretty; }
+
+  .pairs { display: grid; grid-template-columns: 6.5rem 1fr; row-gap: .6rem; align-items: baseline; }
+  .pairs dt { color: var(--color-text-muted); }
+  .pairs dd { font-size: var(--step-1); line-height: var(--leading-snug); }
+  .pairs.skills { grid-template-columns: 7.5rem 1fr; column-gap: var(--space-3); }
+  .pairs.skills dd { font-size: var(--step-0); }
+  @media (max-width: 720px) { .pairs.skills { grid-template-columns: 1fr; row-gap: 0; } .pairs.skills dd + dt { margin-top: var(--space-2); } }
+
+  /* ── load choreography: name rises → status light links up → rules draw → details settle ── */
+  .enter { animation: enter var(--dur-4) var(--ease-out) both; animation-delay: calc(var(--i, 0) * var(--stagger)); }
+  @keyframes enter { from { opacity: 0; transform: translateY(.35rem); } }
+
+  /* hairlines are drawn, not just present: they extend from the left like a link coming up */
+  .section::before, .draw::before { content: ""; position: absolute; inset: 0 0 auto; height: 1px; background: var(--color-rule); transform-origin: left; }
+  .draw::before { animation: draw var(--dur-5) var(--ease-in-out) both; animation-delay: calc(var(--i, 0) * var(--stagger)); }
+  @keyframes draw { from { transform: scaleX(0); } }
+  @supports (animation-timeline: view()) {
+    .section::before { animation: draw linear both; animation-timeline: view(); animation-range: entry 10% entry 70%; }
+    /* entries rise into place as they scroll in; scroll position drives them, so nothing replays or lags */
+    .reveal > li { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(1.25rem); } }
+
+  /* the status square handshakes once, like a port light, then stays on */
+  .link-up { animation: link-up var(--dur-4) steps(1, end) both; animation-delay: var(--stagger); }
+  @keyframes link-up { 0% { opacity: 0; } 25% { opacity: 1; } 45% { opacity: .25; } 65%, 100% { opacity: 1; } }
+}
+
+/* cross-document page transitions: a short crossfade, nothing more */
+@view-transition { navigation: auto; }
+::view-transition-group(root) { animation-duration: var(--dur-3); animation-timing-function: var(--ease-out); }
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  .section::before, .reveal > li { animation: none; }
+}
+@media print { .section::before, .draw::before { animation: none; } }
+
+@layer components {
+  .skip { position: absolute; left: var(--space-2); top: var(--space-2); z-index: 10; padding: .5rem .75rem; background: var(--color-bg); color: var(--color-text); transform: translateY(-200%); }
+  .skip:focus-visible { transform: none; }
+  main:focus { outline: none; }
+}
+
+@layer utilities {
+  .muted { color: var(--color-text-muted); }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}

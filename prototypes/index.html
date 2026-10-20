@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Fearnot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fragment+Mono&family=Literata:opsz,wght@7..72,400;7..72,600&family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
+<script>try { if (localStorage.getItem("lang") === "en") document.documentElement.lang = "en"; } catch {}</script>
+<style>
+@layer tokens, base, layout, components;
+
+@layer tokens {
+  :root {
+    --bg: #121413; --ink: #D8D5CB; --muted: #8F8C83; --rule: #2A2E2C; --accent: #E8A04A;
+    --mono: "Fragment Mono", "Noto Sans TC", ui-monospace, monospace;
+    --serif: "Literata", "Noto Serif TC", serif;
+    --step--1: clamp(.75rem, .73rem + .08vw, .8125rem);
+    --step-0: clamp(1rem, .97rem + .15vw, 1.0625rem);
+    --step-1: clamp(1.125rem, 1.05rem + .35vw, 1.3125rem);
+    --step-2: clamp(1.25rem, 1.12rem + .6vw, 1.625rem);
+    --step-4: clamp(2.75rem, 1.7rem + 4.6vw, 5rem);
+    --space-1: .5rem; --space-2: 1rem; --space-3: 1.5rem; --space-4: 2.5rem;
+    --section: clamp(2.5rem, 1.6rem + 3vw, 4rem);
+    --gutter: clamp(1.5rem, .5rem + 5vw, 5rem);
+    --measure: 720px;
+    --ease-out: cubic-bezier(.2, .7, .1, 1); --dur-2: 200ms; --dur-4: 600ms;
+    color-scheme: dark;
+  }
+}
+
+@layer base {
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font: 400 var(--step-0)/1.8 var(--serif); text-autospace: normal; text-spacing-trim: trim-start; }
+  :root[lang="en"] body { line-height: 1.65; }
+  a { color: inherit; text-decoration: underline 1px var(--muted); text-underline-offset: .28em; transition: color var(--dur-2), text-decoration-color var(--dur-2); }
+  a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  ul, ol { list-style: none; }
+  .mono { font-family: var(--mono); font-size: var(--step--1); letter-spacing: .02em; line-height: 1.6; }
+  .muted { color: var(--muted); }
+  /* bilingual copy lives side by side; the root lang decides which one shows */
+  :root[lang="en"] .zh, :root:not([lang="en"]) .en { display: none; }
+}
+
+@layer layout {
+  .page { max-width: calc(var(--measure) + 2 * var(--gutter)); margin-inline: auto; padding: var(--space-3) var(--gutter) var(--space-4); }
+  .row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); column-gap: var(--space-4); }
+  .row > .content { grid-column: 2; }
+  @media (max-width: 720px) { .row { grid-template-columns: 1fr; row-gap: var(--space-2); } .row > .content { grid-column: 1; } }
+  section.row { padding-block: var(--section); border-top: 1px solid var(--rule); }
+}
+
+@layer components {
+  .top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-2); }
+  .actions { display: flex; align-items: center; gap: var(--space-3); }
+  .docs { display: flex; gap: var(--space-1); }
+  .doc { text-decoration: none; border: 1px solid var(--rule); padding: .35rem .75rem; transition: border-color var(--dur-2), color var(--dur-2); }
+  .doc:hover { border-color: var(--accent); }
+  .lang { display: flex; gap: .15rem; }
+  .lang button { font: inherit; background: none; border: 0; color: var(--muted); padding: .35rem .4rem; cursor: pointer; transition: color var(--dur-2); }
+  .lang button:hover { color: var(--ink); }
+  .lang button[aria-pressed="true"] { color: var(--ink); text-decoration: underline 1px var(--accent); text-underline-offset: .35em; }
+
+  .hero { padding-block: clamp(4rem, 2rem + 8vw, 9rem) var(--section); }
+  .hero h1 { font: 600 var(--step-4)/1 var(--serif); letter-spacing: -.015em; }
+  .hero .roles { margin-top: var(--space-2); }
+  .hero .lede { font-size: var(--step-2); line-height: 1.65; max-width: 30em; margin-top: var(--space-4); text-wrap: pretty; }
+  :root[lang="en"] .hero .lede { line-height: 1.5; }
+  .fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2) var(--space-4); margin-top: var(--space-4); padding-top: var(--space-2); border-top: 1px solid var(--rule); }
+  .fields dt { color: var(--muted); }
+  @media (max-width: 720px) { .fields { grid-template-columns: 1fr 1fr; } }
+  .hero > * { animation: rise var(--dur-4) var(--ease-out) both; }
+  .hero > :nth-child(2) { animation-delay: 60ms; } .hero > :nth-child(3) { animation-delay: 120ms; } .hero > :nth-child(4) { animation-delay: 180ms; }
+  @keyframes rise { from { opacity: 0; transform: translateY(.5rem); } }
+
+  .label { color: var(--muted); font-weight: 400; }
+  .label b { font-weight: 400; color: var(--accent); margin-right: .75em; }
+
+  .xp li { display: grid; grid-template-columns: 7.5rem 1fr; column-gap: var(--space-3); padding-block: var(--space-3); }
+  .xp li + li { border-top: 1px solid var(--rule); }
+  .xp li:first-child { padding-top: 0; }
+  .xp li:last-child { padding-bottom: 0; }
+  .xp .when { padding-top: .3em; }
+  .xp h3 { font: 600 var(--step-1)/1.5 var(--serif); }
+  .xp .org { color: var(--muted); font-weight: 400; margin-left: .5em; }
+  .xp p { color: var(--muted); margin-top: .25rem; text-wrap: pretty; }
+  @media (max-width: 720px) { .xp li { grid-template-columns: 1fr; } }
+
+  .skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3) var(--space-4); }
+  .skills dt { margin-bottom: .25rem; }
+  @media (max-width: 720px) { .skills { grid-template-columns: 1fr; } }
+
+  .list li { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); padding-block: var(--space-2); }
+  .list li + li { border-top: 1px solid var(--rule); }
+  .list li:first-child { padding-top: 0; }
+
+  .contact { display: grid; grid-template-columns: 6.5rem 1fr; row-gap: .6rem; align-items: baseline; }
+  .contact dt { color: var(--muted); }
+  .contact dd { font-size: var(--step-1); line-height: 1.4; }
+
+  footer { display: flex; justify-content: space-between; gap: var(--space-2); flex-wrap: wrap; padding-top: var(--space-3); border-top: 1px solid var(--rule); }
+}
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top mono">
+    <span>fearnot.tw</span>
+    <div class="actions">
+      <div class="lang" role="group" aria-label="Language / 語言">
+        <button type="button" data-lang="zh-Hant-TW" lang="zh-Hant">中</button>
+        <button type="button" data-lang="en" lang="en">EN</button>
+      </div>
+      <nav class="docs" aria-label="Resume / CV">
+        <a class="doc" href="#" download>Resume</a>
+        <a class="doc" href="#" download>CV</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1>Fearnot</h1>
+      <p class="roles mono muted"><span class="zh">資訊工程・資訊安全・網路維運・社群經營</span><span class="en" lang="en">Computer Science · Security · Network Ops · Community</span></p>
+      <p class="lede">
+        <span class="zh">在資訊安全與網路維運之間工作，並在南臺灣學生資訊社群 SCIST 籌辦課程與競賽。相信好的防禦，是讓更多人不再害怕。</span>
+        <span class="en" lang="en">I work between information security and network operations, and organize courses and contests at SCIST, a student tech community in southern Taiwan. Good defense, I believe, means fewer people having to be afraid.</span>
+      </p>
+      <dl class="fields mono">
+        <div><dt><span class="zh">社群</span><span class="en">Community</span></dt><dd>SCIST</dd></div>
+        <div><dt><span class="zh">專注</span><span class="en">Focus</span></dt><dd>Security · NetOps</dd></div>
+        <div><dt><span class="zh">所在地</span><span class="en">Based in</span></dt><dd><span class="zh">臺灣</span><span class="en">Taiwan</span></dd></div>
+      </dl>
+    </div>
+
+    <section class="row" aria-labelledby="s1">
+      <h2 class="label mono" id="s1"><b>01</b><span class="zh">經歷</span><span class="en">Experience</span></h2>
+      <ol class="content xp">
+        <li><span class="when mono muted">2025 — <span class="zh">今</span><span class="en">now</span></span><div>
+          <h3><span class="zh">網路維運</span><span class="en">Network Operations</span><span class="org"><span class="zh">（單位待填）</span><span class="en">(TBD)</span></span></h3>
+          <p><span class="zh">校園網路與機房維運，負責監控、事件處理與事後檢討。</span><span class="en">Campus network and server room operations: monitoring, incident response and postmortems.</span></p></div></li>
+        <li><span class="when mono muted">2024 — <span class="zh">今</span><span class="en">now</span></span><div>
+          <h3><span class="zh">課程與活動籌辦</span><span class="en">Program Organizer</span><span class="org">SCIST</span></h3>
+          <p><span class="zh">資安與演算法課程規劃、講師協調、寒訓與競賽執行。</span><span class="en">Plans security and algorithms courses, coordinates instructors, runs winter camps and contests.</span></p></div></li>
+        <li><span class="when mono muted">2023 — 2024</span><div>
+          <h3><span class="zh">學員</span><span class="en">Student</span><span class="org">SCIST</span></h3>
+          <p><span class="zh">完成演算法與資訊安全課程。</span><span class="en">Completed the algorithms and information security tracks.</span></p></div></li>
+      </ol>
+    </section>
+
+    <section class="row" aria-labelledby="s2">
+      <h2 class="label mono" id="s2"><b>02</b><span class="zh">技能</span><span class="en">Skills</span></h2>
+      <dl class="content skills">
+        <div><dt class="mono muted">Security</dt><dd><span class="zh">Web 安全、CTF、弱點分析</span><span class="en">Web security, CTF, vulnerability analysis</span></dd></div>
+        <div><dt class="mono muted">Network</dt><dd><span class="zh">路由與交換、監控、機房維運</span><span class="en">Routing &amp; switching, monitoring, data center ops</span></dd></div>
+        <div><dt class="mono muted">Engineering</dt><dd><span class="zh">演算法、Linux、自動化腳本</span><span class="en">Algorithms, Linux, automation scripts</span></dd></div>
+        <div><dt class="mono muted">Community</dt><dd><span class="zh">課程設計、活動籌辦、社群經營</span><span class="en">Curriculum design, events, community building</span></dd></div>
+      </dl>
+    </section>
+
+    <section class="row" aria-labelledby="s3">
+      <h2 class="label mono" id="s3"><b>03</b><span class="zh">獎項與專案</span><span class="en">Awards &amp; Projects</span></h2>
+      <ul class="content list">
+        <li><span><span class="zh">（獎項或專案名稱）</span><span class="en">(Award or project)</span></span><span class="mono muted">2026</span></li>
+        <li><span><span class="zh">（獎項或專案名稱）</span><span class="en">(Award or project)</span></span><span class="mono muted">2025</span></li>
+      </ul>
+    </section>
+
+    <section class="row" aria-labelledby="s4">
+      <h2 class="label mono" id="s4"><b>04</b><span class="zh">聯絡</span><span class="en">Contact</span></h2>
+      <dl class="content contact">
+        <dt class="mono">Email</dt><dd><a href="mailto:hello@fearnot.tw">hello@fearnot.tw</a></dd>
+        <dt class="mono">GitHub</dt><dd><a href="#">github.com/…</a></dd>
+        <dt class="mono">Instagram</dt><dd><a href="#">instagram.com/…</a></dd>
+        <dt class="mono">SCIST</dt><dd><a href="https://scist.org">scist.org</a></dd>
+      </dl>
+    </section>
+  </main>
+
+  <footer class="mono muted">
+    <span>© 2026 Fearnot</span>
+    <span><span class="zh">更新於</span><span class="en">Updated</span> 2026-10</span>
+  </footer>
+</div>
+<script>
+const root = document.documentElement, btns = document.querySelectorAll(".lang button");
+const sync = () => btns.forEach(b => b.setAttribute("aria-pressed", (root.lang === "en") === (b.dataset.lang === "en")));
+btns.forEach(b => b.onclick = () => { root.lang = b.dataset.lang; sync(); try { localStorage.setItem("lang", root.lang === "en" ? "en" : "zh"); } catch {} });
+sync();
+</script>
+</body>
+</html>

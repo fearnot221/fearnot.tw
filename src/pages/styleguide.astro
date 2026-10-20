@@ -1,0 +1,238 @@
+---
+import Base from "../layouts/Base.astro";
+
+const colors = [
+  { token: "--color-bg", primitive: "--gray-950", role: "頁面底色" },
+  { token: "--color-surface", primitive: "--gray-900", role: "抬升表面（極少使用）", decorative: true },
+  { token: "--color-rule", primitive: "--gray-800", role: "分隔線、外框", decorative: true },
+  { token: "--color-text-faint", primitive: "--gray-600", role: "停用、裝飾", decorative: true },
+  { token: "--color-text-muted", primitive: "--gray-500", role: "次要文字、標籤" },
+  { token: "--color-text", primitive: "--gray-200", role: "主要文字" },
+  { token: "--color-text-strong", primitive: "--gray-50", role: "強調文字" },
+  { token: "--color-accent", primitive: "--amber-400", role: "唯一強調色：編號、hover、focus" },
+];
+const steps = [
+  { token: "--step-4", use: "Hero 名稱", sample: "Fearnot", display: true },
+  { token: "--step-3", use: "（保留）大標", sample: "網路維運 Network Ops" },
+  { token: "--step-2", use: "導言", sample: "相信好的防禦，是讓更多人不再害怕。" },
+  { token: "--step-1", use: "條目標題、聯絡連結", sample: "課程與活動籌辦 SCIST" },
+  { token: "--step-0", use: "內文", sample: "校園網路與機房維運，負責監控、事件處理與事後檢討。" },
+  { token: "--step--1", use: "標籤、日期（mono）", sample: "2025 — 今 · Security", mono: true },
+];
+const space = ["--space-1", "--space-2", "--space-3", "--space-4", "--space-5", "--section", "--gutter"];
+const motion = [
+  { token: "--dur-1", use: "顏色、底線" },
+  { token: "--dur-2", use: "hover、按下" },
+  { token: "--dur-3", use: "小幅版面變化" },
+  { token: "--dur-4", use: "進場" },
+];
+---
+<Base title="Styleguide — Fearnot" description="Fearnot design system" lang="zh" path="/styleguide/" noindex>
+  <div class="page sg">
+    <header class="top mono">
+      <a class="home" href="/">fearnot.tw</a>
+      <span class="muted">Styleguide · Phase 2</span>
+    </header>
+
+    <div class="hero">
+      <h1 class="enter">Design System</h1>
+      <p class="lede enter" style="--i: 1">單一深色主題、一個強調色、直角、無陰影。層次只靠字級、留白與細線。</p>
+    </div>
+
+    <section class="section" aria-labelledby="c">
+      <h2 class="label" id="c">色彩</h2>
+      <ul class="content swatches">
+        {colors.map((c) => (
+          <li data-token={c.token} data-decorative={c.decorative ? "" : undefined}>
+            <span class="chip" style={`background: var(${c.token})`}></span>
+            <span class="mono">{c.token}<br /><span class="muted">{c.primitive} · <span class="hex"></span></span></span>
+            <span>{c.role}</span>
+            <span class="mono ratio"></span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="t">
+      <h2 class="label" id="t">字體</h2>
+      <div class="content">
+        <dl class="pairs families">
+          <dt class="mono">Display</dt><dd style="font-family: var(--font-display); font-weight: 600">Fearnot <span class="muted mono">Literata · opsz 72 · 僅含 7 字</span></dd>
+          <dt class="mono">Serif</dt><dd>Literata ＋ 思源宋體 Noto Serif TC</dd>
+          <dt class="mono">Mono</dt><dd class="mono" style="font-size: var(--step-1)">Fragment Mono ＋ 系統黑體（PingFang TC／微軟正黑體）</dd>
+        </dl>
+        <ol class="scale">
+          {steps.map((s) => (
+            <li>
+              <span class="mono muted meta" data-var={s.token}>{s.token} · {s.use}<br /><span class="val"></span></span>
+              <span class={s.mono ? "mono" : ""} style={`font-size: var(${s.token}); ${s.display ? "font-family: var(--font-display); font-weight: 600; line-height: 1; letter-spacing: var(--tracking-display)" : ""}`}>{s.sample}</span>
+            </li>
+          ))}
+        </ol>
+        <div class="mix">
+          <p class="mono muted">中英混排 · 標點擠壓 · text-autospace</p>
+          <p>凌晨三點，監控面板上的流量曲線突然垂直落下（BGP 路由洩漏）。這不是斷線──線路還在，只是封包開始走向一條不該存在的路。</p>
+          <p class="en" lang="en">At 3 a.m. the traffic graph dropped straight down. Not an outage — the link was up; packets had just started taking a route that shouldn't exist.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="s">
+      <h2 class="label" id="s">間距</h2>
+      <ul class="content bars">
+        {space.map((t) => (
+          <li><span class="mono muted" data-var={t}>{t} <span class="val"></span></span><span class="bar" style={`width: var(${t})`}></span></li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="g">
+      <h2 class="label" id="g">網格</h2>
+      <div class="content">
+        <p>內容最寬 <code class="mono">--measure: 720px</code>，置中，兩側留 <code class="mono">--gutter</code>。單欄、由上而下閱讀：章節標題，接著日期、標題、說明。</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="m">
+      <h2 class="label" id="m">動態</h2>
+      <div class="content">
+        <ul class="motion">
+          {motion.map((m) => (
+            <li><span class="mono muted" data-var={m.token}>{m.token} <span class="val"></span></span><span>{m.use}</span><span class="track"><span class="dot" style={`transition-duration: var(${m.token})`}></span></span></li>
+          ))}
+        </ul>
+        <p class="note"><button type="button" class="doc mono" id="play">播放</button> <span class="mono muted">easing: --ease-out · 系統開啟「減少動態效果」時所有 duration 歸零</span></p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="r">
+      <h2 class="label" id="r">圓角與陰影</h2>
+      <p class="content"><code class="mono">--radius: 0</code>、<code class="mono">--shadow: none</code>。全站直角、不用陰影；需要區隔時，只用 1px 細線 <code class="mono">--border</code>。</p>
+    </section>
+
+    <section class="section" aria-labelledby="k">
+      <h2 class="label" id="k">元件</h2>
+      <div class="content components">
+        <div>
+          <p class="mono muted cap">連結 · 文件按鈕 · 語言切換</p>
+          <div class="inline">
+            <a href="#k">文字連結</a>
+            <a class="doc mono" href="#k">Resume</a>
+            <a class="doc mono" href="#k">CV</a>
+            <div class="lang mono" role="group" aria-label="Language / 語言">
+              <button type="button" data-lang="zh-Hant-TW" aria-pressed="true">中</button>
+              <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+          </div>
+          <p class="mono muted hint">按 Tab 檢視 focus ring：2px 強調色、外推 3px。</p>
+        </div>
+        <div>
+          <p class="mono muted cap">章節標籤</p>
+          <h3 class="label">經歷</h3>
+        </div>
+        <div>
+          <p class="mono muted cap">條目</p>
+          <ol class="entries">
+            <li><span class="when mono">2025 — 今</span><div><h3>網路維運<span class="org">（單位）</span></h3><p>校園網路與機房維運，負責監控、事件處理與事後檢討。</p></div></li>
+            <li><span class="when mono">2024 — 今</span><div><h3>課程與活動籌辦<span class="org">SCIST</span></h3><p>資安與演算法課程規劃、講師協調。</p></div></li>
+          </ol>
+        </div>
+        <div>
+          <p class="mono muted cap">聯絡</p>
+          <dl class="pairs">
+            <dt class="mono">Email</dt><dd><a href="#k">hello@fearnot.tw</a></dd>
+            <dt class="mono">GitHub</dt><dd><a href="#k">github.com/…</a></dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  @layer components {
+    .hero { padding-block: clamp(3rem, 1.5rem + 6vw, 6rem) var(--section); }
+    .hero h1 { font: 600 var(--step-4) / var(--leading-display) var(--font-serif); letter-spacing: var(--tracking-display); } /* display subset only covers "Fearnot" */
+    .lede { font-size: var(--step-2); line-height: 1.65; margin-top: var(--space-3); max-width: 30em; text-wrap: pretty; }
+
+    .swatches li { display: grid; grid-template-columns: 2.5rem minmax(0, 1.3fr) minmax(0, 1fr) 6.5rem; gap: var(--space-2); align-items: center; padding-block: .6rem; }
+    .swatches li + li { border-top: var(--border); }
+    .chip { width: 2.5rem; height: 2.5rem; border: var(--border); }
+    .ratio { text-align: right; }
+    @media (max-width: 720px) { .swatches li { grid-template-columns: 2.5rem 1fr; } .swatches li > :nth-child(n+3) { grid-column: 2; } .ratio { text-align: left; } }
+
+    .families { margin-bottom: var(--space-4); }
+    .families dd { font-size: var(--step-1); }
+    .scale li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: var(--space-2); align-items: baseline; padding-block: var(--space-2); }
+    .scale li + li { border-top: var(--border); }
+    .scale .val, .bars .val, .motion .val { color: var(--color-text-muted); }
+    @media (max-width: 720px) { .scale li { grid-template-columns: 1fr; } }
+    .mix { margin-top: var(--space-4); padding-top: var(--space-2); border-top: var(--border); }
+    .mix p + p { margin-top: var(--space-2); }
+    .mix .en { display: block; line-height: var(--leading-en); letter-spacing: 0; color: var(--color-text-muted); }
+
+    .bars li { display: grid; grid-template-columns: 11rem 1fr; align-items: center; gap: var(--space-2); padding-block: .4rem; }
+    .bar { display: block; height: .5rem; background: var(--color-accent); }
+
+
+    .motion li { display: grid; grid-template-columns: 11rem 7rem 1fr; align-items: center; gap: var(--space-2); padding-block: .5rem; }
+    .track { position: relative; height: 1px; background: var(--color-rule); }
+    .dot { position: absolute; left: 0; top: -4px; width: 9px; height: 9px; background: var(--color-accent); transition-property: left; transition-timing-function: var(--ease-out); }
+    .playing .dot { left: calc(100% - 9px); }
+    @media (max-width: 720px) { .motion li { grid-template-columns: 1fr 1fr; } .track { grid-column: 1 / -1; } }
+    .note { margin-top: var(--space-3); display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; }
+
+    code { font-size: .85em; color: var(--color-text-strong); }
+
+    .components { display: grid; gap: var(--space-4); }
+    .cap { margin-bottom: var(--space-2); }
+    .inline { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+    .hint { margin-top: var(--space-2); }
+  }
+</style>
+
+<script>
+  const root = document.documentElement;
+  const css = getComputedStyle(root);
+  const read = (v: string) => css.getPropertyValue(v).trim();
+
+  // live token values, so the page can never drift from tokens.css
+  document.querySelectorAll<HTMLElement>("[data-var]").forEach((el) => {
+    const val = el.querySelector(".val");
+    if (val) val.textContent = read(el.dataset.var!);
+  });
+
+  const hexOf = (token: string) => {
+    const probe = document.createElement("span");
+    probe.style.color = `var(${token})`;
+    document.body.append(probe);
+    const [r, g, b] = getComputedStyle(probe).color.match(/\d+/g)!.map(Number);
+    probe.remove();
+    return [r, g, b];
+  };
+  const lum = ([r, g, b]: number[]) => {
+    const f = (c: number) => ((c /= 255) <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+  };
+  const bg = lum(hexOf("--color-bg"));
+  document.querySelectorAll<HTMLElement>(".swatches li").forEach((li) => {
+    const rgb = hexOf(li.dataset.token!);
+    li.querySelector(".hex")!.textContent = "#" + rgb.map((n) => n.toString(16).padStart(2, "0")).join("").toUpperCase();
+    const l = lum(rgb);
+    const ratio = (Math.max(l, bg) + 0.05) / (Math.min(l, bg) + 0.05);
+    const out = li.querySelector(".ratio")!;
+    if (li.dataset.token === "--color-bg") out.textContent = "—";
+    else if (li.hasAttribute("data-decorative")) out.textContent = `${ratio.toFixed(1)}:1 非文字`;
+    else out.textContent = `${ratio.toFixed(1)}:1 ${ratio >= 7 ? "AAA" : ratio >= 4.5 ? "AA" : "未達 AA"}`;
+  });
+
+  const list = document.querySelector(".motion")!;
+  document.getElementById("play")!.addEventListener("click", () => list.classList.toggle("playing"));
+
+  document.querySelectorAll<HTMLButtonElement>(".lang button").forEach((b, _, all) =>
+    b.addEventListener("click", () => {
+      root.lang = b.dataset.lang!;
+      all.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    }),
+  );
+</script>

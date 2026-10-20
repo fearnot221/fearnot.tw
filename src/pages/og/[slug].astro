@@ -1,0 +1,35 @@
+---
+// 1200×630 social cards. Not linked anywhere: scripts/assets.mjs screenshots these into public/og/*.png.
+import Base from "../../layouts/Base.astro";
+import { person, type Lang } from "../../data/profile";
+
+export function getStaticPaths() {
+  const langs: Lang[] = ["zh", "en"];
+  return (["home", "resume"] as const).flatMap((kind) => langs.map((lang) => ({ params: { slug: `${kind}-${lang}` }, props: { kind, lang } })));
+}
+const { kind, lang } = Astro.props;
+const label = { home: "", resume: "Resume" }[kind];
+---
+<Base title="OG" description="" lang={lang} path="/" noindex>
+  <div class="card">
+    <header class="mono"><span>fearnot.tw</span><span class="mark" aria-hidden="true"></span></header>
+    <div>
+      {label && <p class="mono kind">{label}</p>}
+      {kind === "home" ? <h1 class="display">Fearnot</h1> : <h1 class="name">{person.name[lang]}</h1>}
+    </div>
+    <footer class="mono">{kind === "home" ? person.roles[lang] : `Fearnot · ${person.roles[lang]}`}</footer>
+  </div>
+</Base>
+
+<style>
+  @layer components {
+    .card { width: 1200px; height: 630px; padding: 72px 88px; display: flex; flex-direction: column; justify-content: space-between; background: var(--color-bg); }
+    header { display: flex; justify-content: space-between; align-items: center; font-size: 22px; color: var(--color-text-muted); }
+    .mark { width: 22px; height: 22px; background: var(--color-accent); }
+    .kind { font-size: 22px; color: var(--color-accent); margin-bottom: 20px; }
+    .display { font: 600 168px/1 var(--font-display); letter-spacing: var(--tracking-display); }
+    .name { font: 600 112px/1.1 var(--font-serif); letter-spacing: .04em; }
+    :global(:root:lang(en)) .name { letter-spacing: var(--tracking-display); }
+    footer { font-size: 22px; color: var(--color-text-muted); padding-top: 28px; border-top: var(--border); }
+  }
+</style>
