@@ -1,0 +1,21 @@
+---
+// GitHub Pages serves dist/404.html for any missing path (old /cv/ links included).
+import Base from "../layouts/Base.astro";
+---
+<Base title="404 — Fearnot" description="找不到這個頁面 / Page not found" lang="zh" path="/404/" noindex>
+  <main id="main" class="page nf">
+    <p class="mono muted"><span class="status" aria-hidden="true"></span>404 · no route to host</p>
+    <h1>找不到這個頁面</h1>
+    <p class="en" lang="en">This page doesn't exist.</p>
+    <p class="mono"><a href="/">← fearnot.tw</a>　<a href="/resume/">Resume</a></p>
+  </main>
+</Base>
+
+<style>
+  @layer components {
+    .nf { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; gap: var(--space-2); }
+    .nf h1 { font: 600 var(--step-3) / 1.2 var(--font-serif); }
+    .nf .en { display: block; color: var(--color-text-muted); }
+    .nf a { display: inline-block; padding-block: .3rem; }
+  }
+</style>

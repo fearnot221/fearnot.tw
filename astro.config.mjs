@@ -10,7 +10,7 @@ export default defineConfig({
   image: { domains: ["gravatar.com"] },
   integrations: [
     sitemap({
-      filter: (url) => !/\/(styleguide|og)\//.test(url),
+      filter: (url) => !/\/(styleguide|og|404)\//.test(url),
       i18n: { defaultLocale: "zh", locales: { zh: "zh-Hant-TW", en: "en" } },
     }),
   ],
