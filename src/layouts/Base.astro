@@ -74,7 +74,9 @@ const ogLocale = { zh: "zh_TW", en: "en_US" } as const;
   )}
   <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" type="image/x-icon" />
   <link rel="sitemap" href="/sitemap-index.xml" />
-  <link rel="preload" href="/fonts/literata.woff2" as="font" type="font/woff2" crossorigin />
+  {["literata", "fragment-mono", ...(lang === "zh" ? ["noto-serif-tc-400", "noto-serif-tc-600"] : [])].map((f) => (
+    <link rel="preload" href={`/fonts/${f}.woff2`} as="font" type="font/woff2" crossorigin />
+  ))}
   <slot name="head" />
   {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
 </head>
