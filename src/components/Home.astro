@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import LangSwitch from "./LangSwitch.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 import { getImage } from "astro:assets";
-import { person, experience, awards, certifications, projects, footerGifs, reservedGifSlots, type Lang } from "../data/profile";
+import { person, experience, awards, certifications, projects, footerGifs, reservedGifSlots, type Lang, type Org, type Role } from "../data/profile";
 import { ui, pathFor } from "../i18n";
 import { homeLd } from "../seo";
 
@@ -11,6 +11,12 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const onResume = <X extends { resume?: boolean }>(xs: X[]) => xs.filter((x) => x.resume);
 const honors = [...onResume(awards), ...onResume(certifications)];
+const range = (r: Pick<Role, "start" | "end">) => (r.start === r.end ? r.start : `${r.start} — ${r.end ?? ui.present[lang]}`);
+// the community's years run from its first role's start to its last role's end (an open role keeps it open)
+const span = (o: Org) => range({
+  start: o.roles.map((r) => r.start).sort()[0],
+  end: o.roles.some((r) => !r.end) ? undefined : o.roles.map((r) => r.end!).sort().at(-1),
+});
 // fetched from Gravatar at build time and served from this site as a small webp
 // Astro fetches remote images late in the build and fails it on a 404, so check first:
 // an unreachable or missing Gravatar falls back to the empty frame instead of breaking the deploy
@@ -67,11 +73,18 @@ const icons: Record<string, { box: string; fill?: boolean; d: string[] }> = {
       <section class="section" aria-labelledby="experience">
         <h2 class="label" id="experience">{ui.experience[lang]}</h2>
         <ol class="entries reveal">
-          {onResume(experience).map((e) => (
+          {onResume(experience).map((o) => (
             <li>
-              <span class="when mono">{e.start === e.end ? e.start : `${e.start} — ${e.end ?? ui.present[lang]}`}</span>
-              <h3>{e.title[lang]}{" "}<span class="org">{e.org[lang]}</span></h3>
-              {e.summary && <p>{e.summary[lang]}</p>}
+              <span class="when mono">{span(o)}</span>
+              <span class="org">{o.org[lang]}</span>
+              {o.roles.map((r) => (
+                <div class="role">
+                  {/* a role's own years only when they differ from the community's */}
+                  <h3>{r.title[lang]}{range(r) !== span(o) && <span class="role-when mono">{range(r)}</span>}</h3>
+                  {r.summary && <p>{r.summary[lang]}</p>}
+                </div>
+              ))}
+              {o.summary && <p class="shared">{o.summary[lang]}</p>}
             </li>
           ))}
         </ol>
@@ -177,6 +190,8 @@ const icons: Record<string, { box: string; fill?: boolean; d: string[] }> = {
     :global(:root:lang(en)) .lede { line-height: 1.5; }
 
     .entries h3 a { text-decoration-color: var(--color-rule); }
+    .role + .role, .shared { margin-top: var(--space-2); }
+    .role-when { font-size: var(--step--1); font-weight: 400; color: var(--color-text-muted); margin-left: .6em; }
     .projects a { text-decoration-color: var(--color-rule); }
     .projects small { display: block; font-size: var(--step--1); line-height: 1.6; color: var(--color-text-muted); margin-top: .15rem; }
     .list li { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); padding-block: var(--space-2); }
