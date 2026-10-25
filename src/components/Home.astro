@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import LangSwitch from "./LangSwitch.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 import { getImage } from "astro:assets";
-import { person, experience, awards, certifications, projects, footerGifs, reservedGifSlots, type Lang, type Org, type Role } from "../data/profile";
+import { person, experience, communities, awards, certifications, projects, footerGifs, reservedGifSlots, type Lang, type Org, type Role } from "../data/profile";
 import { ui, pathFor } from "../i18n";
 import { homeLd } from "../seo";
 
@@ -88,6 +88,15 @@ const icons: Record<string, { box: string; fill?: boolean; d: string[] }> = {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section class="section" aria-labelledby="communities">
+        <h2 class="label" id="communities">{ui.communities[lang]}</h2>
+        <ul class="list projects reveal">
+          {communities.map((c) => (
+            <li><span>{c.href ? <a href={c.href}>{c.name[lang]}</a> : c.name[lang]}{c.summary && <small>{c.summary[lang]}</small>}</span></li>
+          ))}
+        </ul>
       </section>
 
       <section class="section" aria-labelledby="honors">
