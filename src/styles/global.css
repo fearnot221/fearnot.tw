@@ -2,10 +2,10 @@
 
 @import "./tokens.css";
 
-@font-face { font-family: "Literata"; src: url("/fonts/literata.woff2") format("woff2"); font-weight: 400 600; font-display: swap; }
-@font-face { font-family: "Literata Display"; src: url("/fonts/literata-display.woff2") format("woff2"); font-weight: 600; font-display: swap; }
-@font-face { font-family: "Fragment Mono"; src: url("/fonts/fragment-mono.woff2") format("woff2"); font-weight: 400; font-display: swap; }
-/* the CJK serif is the largest file: "optional" means a late arrival never repaints or shifts the page (it is cached for the next view) */
+/* every face is preloaded and "optional": the first paint already has it, and a late arrival never repaints (it is cached for the next view) */
+@font-face { font-family: "Literata"; src: url("/fonts/literata.woff2") format("woff2"); font-weight: 400 600; font-display: optional; }
+@font-face { font-family: "Literata Display"; src: url("/fonts/literata-display.woff2") format("woff2"); font-weight: 600; font-display: optional; }
+@font-face { font-family: "Fragment Mono"; src: url("/fonts/fragment-mono.woff2") format("woff2"); font-weight: 400; font-display: optional; }
 @font-face { font-family: "Noto Serif TC"; src: url("/fonts/noto-serif-tc-400.woff2") format("woff2"); font-weight: 400; font-display: optional; }
 @font-face { font-family: "Noto Serif TC"; src: url("/fonts/noto-serif-tc-600.woff2") format("woff2"); font-weight: 600; font-display: optional; }
 
