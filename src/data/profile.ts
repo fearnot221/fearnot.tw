@@ -37,8 +37,8 @@ export const person = {
     en: "I focus on information security. As lead organizer of SCIST, a 2,700-member student tech community in southern Taiwan, I help high school students get into security and algorithms. Good defense, I believe, means fewer people having to be afraid.",
   } as T,
   summary: {
-    zh: "專注於資訊安全與網路維運，並投入南臺灣的資訊教育。獲第 55 屆全國技能競賽南區分賽網路安全職類第一名、InfoSec Taiwan CTF 2025 高中組第二名。",
-    en: "Security-focused student who also runs networks and tech education in southern Taiwan. 1st place, Cyber Security, 55th National Skills Competition (Southern Regional); 2nd place, high school division, InfoSec Taiwan CTF 2025.",
+    zh: "專注於資訊安全與網路維運。具備滲透測試、Web 安全、數位鑑識與封包分析的實務經驗，熟悉 Linux 系統管理與網路服務維運，並能以 Python、TypeScript 開發全端應用與自動化工具。長期投入南臺灣資訊教育，擅長技術課程規劃與社群經營。",
+    en: "Focused on information security and network operations. Hands-on with penetration testing, web security, digital forensics and packet analysis; experienced in Linux administration and running network services; builds full-stack apps and automation in Python and TypeScript. Long involved in tech education in southern Taiwan, designing courses and building communities.",
   } as T,
   /** Gravatar of the contact email; set to undefined to show the empty frame instead */
   avatar: gravatar(EMAIL, 320) as string | undefined,

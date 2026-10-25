@@ -15,8 +15,10 @@ interface Props {
   noindex?: boolean;
   /** "paper" pins the white Resume/CV palette; otherwise the visitor's theme applies */
   theme?: "paper";
+  /** page exists in one language only: no hreflang alternates */
+  monolingual?: boolean;
 }
-const { title, description, lang, path, ogImage, jsonld, noindex = false, theme } = Astro.props;
+const { title, description, lang, path, ogImage, jsonld, noindex = false, theme, monolingual = false } = Astro.props;
 const site = Astro.site!;
 const url = (l: Lang) => new URL(pathFor(l, path), site).href;
 const ogLocale = { zh: "zh_TW", en: "en_US" } as const;
@@ -45,16 +47,20 @@ const ogLocale = { zh: "zh_TW", en: "en_US" } as const;
   {noindex ? <meta name="robots" content="noindex" /> : (
     <>
       <link rel="canonical" href={url(lang)} />
-      <link rel="alternate" hreflang="zh-Hant-TW" href={url("zh")} />
-      <link rel="alternate" hreflang="en" href={url("en")} />
-      <link rel="alternate" hreflang="x-default" href={url("zh")} />
+      {!monolingual && (
+        <>
+          <link rel="alternate" hreflang="zh-Hant-TW" href={url("zh")} />
+          <link rel="alternate" hreflang="en" href={url("en")} />
+          <link rel="alternate" hreflang="x-default" href={url("zh")} />
+        </>
+      )}
       <meta property="og:type" content="profile" />
       <meta property="og:site_name" content="Fearnot" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url(lang)} />
       <meta property="og:locale" content={ogLocale[lang]} />
-      <meta property="og:locale:alternate" content={ogLocale[lang === "zh" ? "en" : "zh"]} />
+      {!monolingual && <meta property="og:locale:alternate" content={ogLocale[lang === "zh" ? "en" : "zh"]} />}
       {ogImage && (
         <>
           <meta property="og:image" content={new URL(ogImage, site).href} />

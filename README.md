@@ -15,10 +15,10 @@ Fearnot 的個人網站與履歷，以 Astro、TypeScript 和原生 CSS 建置�
 | 路徑                                       | 內容                             |
 | ------------------------------------------ | -------------------------------- |
 | `/`、`/en/`                                | 中文／英文首頁                   |
-| `/resume/`、`/en/resume/`                  | 中文／英文履歷                   |
-| `/pdf/resume-zh.pdf`、`/pdf/resume-en.pdf` | 可下載的履歷 PDF                 |
+| `/resume/`                                 | 履歷（僅中文）                   |
+| `/pdf/resume-zh.pdf`                       | 可下載的履歷 PDF                 |
 | `/styleguide/`                             | 設計樣式參考頁，設為 `noindex`   |
-| `/og/{home,resume}-{zh,en}/`               | 分享圖片的渲染頁，設為 `noindex` |
+| `/og/home-{zh,en}/`、`/og/resume-zh/`      | 分享圖片的渲染頁，設為 `noindex` |
 
 ## 本機開發
 
