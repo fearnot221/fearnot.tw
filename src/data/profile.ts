@@ -19,6 +19,16 @@ export interface Entry {
   resume?: boolean;
 }
 
+// One community; several roles in it share the org line, and `summary` here covers them all
+export interface Org {
+  org: T;
+  roles: Role[];
+  summary?: T;
+  resume?: boolean;
+}
+
+export type Role = Pick<Entry, "start" | "end" | "title" | "summary" | "details">;
+
 export interface Item {
   year?: string;
   title: T;
@@ -58,102 +68,120 @@ export const person = {
   ],
 };
 
-export const experience: Entry[] = [
+export const experience: Org[] = [
   {
-    start: "2024",
-    end: "2026",
-    title: { zh: "總召、網管", en: "Lead Organizer & Network Admin" },
     org: { zh: "SCIST 南臺灣學生資訊社群", en: "SCIST" },
-    summary: {
-      zh: "第五、六屆總召。經營 2,700 人以上的社群，撰寫計畫書向資訊科技公司募得 30 餘萬元贊助，舉辦為期一年、學員超過 200 人的免費資安與演算法課程，並與 20 餘所南部高中資訊社合作。",
-      en: "Led the 5th and 6th terms. Runs a 2,700+ member community, raised over NT$300,000 from tech companies through written proposals, and ran a free year-long security and algorithms program for 200+ students with 20+ high school computer clubs in southern Taiwan.",
-    },
-    details: [
+    roles: [
       {
-        zh: "開發 SCIST Discord bot：學員輸入代碼即可領取身分組，管理員可批次發放，大幅減少行政工作。",
-        en: "Built the SCIST Discord bot: students claim roles with a code and admins grant roles in batches, removing most manual admin work.",
+        start: "2024",
+        end: "2026",
+        title: { zh: "總召、網管", en: "Lead Organizer & Network Admin" },
+        summary: {
+          zh: "第五、六屆總召。經營 2,700 人以上的社群，撰寫計畫書向資訊科技公司募得 30 餘萬元贊助，舉辦為期一年、學員超過 200 人的免費資安與演算法課程，並與 20 餘所南部高中資訊社合作。",
+          en: "Led the 5th and 6th terms. Runs a 2,700+ member community, raised over NT$300,000 from tech companies through written proposals, and ran a free year-long security and algorithms program for 200+ students with 20+ high school computer clubs in southern Taiwan.",
+        },
+        details: [
+          {
+            zh: "開發 SCIST Discord bot：學員輸入代碼即可領取身分組，管理員可批次發放，大幅減少行政工作。",
+            en: "Built the SCIST Discord bot: students claim roles with a code and admins grant roles in batches, removing most manual admin work.",
+          },
+          {
+            zh: "擔任第五、六屆網管，負責社群的網路與服務維運。",
+            en: "Network administrator for the 5th and 6th terms, running the community's network and services.",
+          },
+          {
+            zh: "在 SITCON、HITCON 擺攤推廣，並設計、開發問答式迷宮小遊戲。",
+            en: "Ran booths at SITCON and HITCON, with a quiz-maze mini game I designed and built.",
+          },
+        ],
       },
       {
-        zh: "擔任第五、六屆網管，負責社群的網路與服務維運。",
-        en: "Network administrator for the 5th and 6th terms, running the community's network and services.",
-      },
-      {
-        zh: "在 SITCON、HITCON 擺攤推廣，並設計、開發問答式迷宮小遊戲。",
-        en: "Ran booths at SITCON and HITCON, with a quiz-maze mini game I designed and built.",
+        start: "2024",
+        end: "2026",
+        title: {
+          zh: "資訊安全推廣課程 講師",
+          en: "Instructor, Security Outreach Course",
+        },
+        summary: {
+          zh: "有感於南部缺乏資安資源，開辦資訊安全推廣課程，讓更多國高中生接觸資安。",
+          en: "Started a security outreach course so more students in under-served southern Taiwan can get into security.",
+        },
       },
     ],
     resume: true,
   },
   {
-    start: "2024",
-    end: "2026",
-    title: {
-      zh: "資訊安全推廣課程 講師",
-      en: "Instructor, Security Outreach Course",
-    },
-    org: { zh: "SCIST", en: "SCIST" },
-    summary: {
-      zh: "有感於南部缺乏資安資源，開辦資訊安全推廣課程，讓更多國高中生接觸資安。",
-      en: "Started a security outreach course so more students in under-served southern Taiwan can get into security.",
-    },
-    resume: true,
-  },
-  {
-    start: "2025",
-    end: "2026",
-    title: { zh: "場務組 組長", en: "Venue Team Lead" },
     org: { zh: "SITCON 2026 學生計算機年會", en: "SITCON 2026" },
-    summary: {
-      zh: "管理年會場地相關事務，並規劃 SITCON Hour of Code 南部場。",
-      en: "Ran venue operations for the conference and is planning the southern SITCON Hour of Code.",
-    },
-    details: [
+    roles: [
       {
-        zh: "SITCON 2025 場務組機動股股長：協助報到、場地機動、餐飲與物流規劃。",
-        en: "SITCON 2025, venue floor team lead: registration, on-site logistics, catering and supplies.",
-      },
-      {
-        zh: "SITCON Camp 2025 庶務組組長：負責營隊住宿與場地。",
-        en: "SITCON Camp 2025, operations lead: lodging and venues.",
+        start: "2025",
+        end: "2026",
+        title: { zh: "場務組 組長", en: "Venue Team Lead" },
+        summary: {
+          zh: "管理年會場地相關事務，並規劃 SITCON Hour of Code 南部場。",
+          en: "Ran venue operations for the conference and is planning the southern SITCON Hour of Code.",
+        },
+        details: [
+          {
+            zh: "SITCON 2025 場務組機動股股長：協助報到、場地機動、餐飲與物流規劃。",
+            en: "SITCON 2025, venue floor team lead: registration, on-site logistics, catering and supplies.",
+          },
+          {
+            zh: "SITCON Camp 2025 庶務組組長：負責營隊住宿與場地。",
+            en: "SITCON Camp 2025, operations lead: lodging and venues.",
+          },
+        ],
       },
     ],
     resume: true,
   },
   {
-    start: "2025",
-    end: "2025",
-    title: { zh: "聯合寒訓 總召、副召", en: "Winter Camp Lead & Deputy Lead" },
     org: {
       zh: "六校聯合寒訓、SCIST × 南十五校聯合寒訓",
       en: "Six-School & SCIST × 15-School Winter Camps",
     },
-    summary: {
-      zh: "帶領六校、超過 70 人參訪科技公司與校園；並與南部十五所高中合辦三天住宿營隊，約 150 人參與。",
-      en: "Led a six-school trip of 70+ students to tech companies and campuses, and co-ran a three-day residential camp with 15 southern high schools for about 150 students.",
-    },
+    roles: [
+      {
+        start: "2025",
+        end: "2025",
+        title: { zh: "聯合寒訓 總召、副召", en: "Winter Camp Lead & Deputy Lead" },
+        summary: {
+          zh: "帶領六校、超過 70 人參訪科技公司與校園；並與南部十五所高中合辦三天住宿營隊，約 150 人參與。",
+          en: "Led a six-school trip of 70+ students to tech companies and campuses, and co-ran a three-day residential camp with 15 southern high schools for about 150 students.",
+        },
+      },
+    ],
   },
   {
-    start: "2024",
-    end: "2024",
-    title: {
-      zh: "南區資安體驗營 講師",
-      en: "Instructor, Southern Security Camp",
-    },
     org: { zh: "AIS3 Club", en: "AIS3 Club" },
-    summary: {
-      zh: "講授 Linux 基礎：作業系統、虛擬機到基礎指令與應用。",
-      en: "Taught Linux fundamentals: operating systems, virtual machines and everyday commands.",
-    },
+    roles: [
+      {
+        start: "2024",
+        end: "2024",
+        title: {
+          zh: "南區資安體驗營 講師",
+          en: "Instructor, Southern Security Camp",
+        },
+        summary: {
+          zh: "講授 Linux 基礎：作業系統、虛擬機到基礎指令與應用。",
+          en: "Taught Linux fundamentals: operating systems, virtual machines and everyday commands.",
+        },
+      },
+    ],
   },
   {
-    start: "2024",
-    end: "2025",
-    title: { zh: "場務組 副組長", en: "Deputy Venue Lead" },
     org: { zh: "MOPCON", en: "MOPCON" },
-    summary: {
-      zh: "2024 年擔任組員，2025 年擔任副組長。",
-      en: "Crew in 2024, deputy lead in 2025.",
-    },
+    roles: [
+      {
+        start: "2024",
+        end: "2025",
+        title: { zh: "場務組 副組長", en: "Deputy Venue Lead" },
+        summary: {
+          zh: "2024 年擔任組員，2025 年擔任副組長。",
+          en: "Crew in 2024, deputy lead in 2025.",
+        },
+      },
+    ],
   },
 ];
 

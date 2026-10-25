@@ -2,7 +2,7 @@
 // The Resume as a real document: one A4 sheet, identical on screen and on paper.
 // Chinese only; both names are shown. It deliberately drops the website's language (mono labels, motion, accent colour) for résumé conventions.
 import Base from "../layouts/Base.astro";
-import { person, experience, education, skills, awards, certifications, projects, type Entry, type T } from "../data/profile";
+import { person, experience, education, skills, awards, certifications, projects, type Role, type T } from "../data/profile";
 import { ui, pathFor } from "../i18n";
 import { docLd } from "../seo";
 
@@ -12,8 +12,8 @@ const name = person.name.zh;
 const path = "/resume/";
 const pdf = `/pdf/resume-${lang}.pdf`;
 const fileName = `${name.replace(/\s+/g, "-")}-Resume.pdf`;
-const range = (e: Entry) => (e.end === e.start ? e.start : `${e.start} – ${e.end ?? ui.present[lang]}`);
-const bullets = (e: Entry): T[] => [...(e.summary ? [e.summary] : []), ...(e.details ?? [])];
+const range = (e: Role) => (e.end === e.start ? e.start : `${e.start} – ${e.end ?? ui.present[lang]}`);
+const bullets = (e: Role): T[] => [...(e.summary ? [e.summary] : []), ...(e.details ?? [])];
 const contact = [
   { text: person.email, href: `mailto:${person.email}` },
   ...person.links.map((l) => ({ text: l.text, href: l.href })),
@@ -61,10 +61,15 @@ const contact = [
 
     <section aria-labelledby="experience">
       <h2 id="experience">{ui.experience[lang]}</h2>
-      {onResume(experience).map((e) => (
+      {onResume(experience).map((o) => (
         <article class="r-entry">
-          <div class="r-row"><h3><strong>{e.title[lang]}</strong><span class="r-org">{e.org[lang]}</span></h3><span class="r-date">{range(e)}</span></div>
-          <ul class="r-bullets">{bullets(e).map((b) => <li>{b[lang]}</li>)}</ul>
+          {o.roles.map((e) => (
+            <Fragment>
+              <div class="r-row"><h3><strong>{e.title[lang]}</strong><span class="r-org">{o.org[lang]}</span></h3><span class="r-date">{range(e)}</span></div>
+              <ul class="r-bullets">{bullets(e).map((b) => <li>{b[lang]}</li>)}</ul>
+            </Fragment>
+          ))}
+          {o.summary && <ul class="r-bullets"><li>{o.summary[lang]}</li></ul>}
         </article>
       ))}
     </section>
@@ -132,6 +137,7 @@ const contact = [
     .r-entry + .r-entry { margin-top: 6pt; }
     .r-entry { break-inside: avoid; }
     .r-bullets { list-style: disc; padding-left: 1.15em; margin-top: 1.5pt; }
+    .r-bullets + .r-row { margin-top: 3pt; }
     .r-bullets li { padding-left: .15em; text-wrap: pretty; }
     .r-bullets li::marker { color: #9a9a96; }
 

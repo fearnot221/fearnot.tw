@@ -64,7 +64,7 @@ async function cjk() {
 async function cjkBold() {
   const data = await import(new URL("../src/data/profile.ts", import.meta.url).href);
   const { ui } = await import(new URL("../src/i18n.ts", import.meta.url).href);
-  const titles = [data.person.name, ...Object.values(ui), ...[data.experience, data.education, data.projects].flat().flatMap((e) => [e.title, e.org])];
+  const titles = [data.person.name, ...Object.values(ui), ...data.experience.flatMap((o) => [o.org, ...o.roles.map((r) => r.title)]), ...[data.education, data.projects].flat().flatMap((e) => [e.title, e.org])];
   return " " + [...new Set(titles.flatMap((t) => [...t.zh]).filter((ch) => ch.codePointAt(0) > 0x2e7f))].join("") + "，、（）／";
 }
 
