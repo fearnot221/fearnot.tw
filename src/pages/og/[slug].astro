@@ -5,7 +5,8 @@ import { person, type Lang } from "../../data/profile";
 
 export function getStaticPaths() {
   const langs: Lang[] = ["zh", "en"];
-  return (["home", "resume"] as const).flatMap((kind) => langs.map((lang) => ({ params: { slug: `${kind}-${lang}` }, props: { kind, lang } })));
+  const cards = [...langs.map((lang) => ({ kind: "home" as const, lang })), { kind: "resume" as const, lang: "zh" as Lang }]; // the Resume is zh only
+  return cards.map(({ kind, lang }) => ({ params: { slug: `${kind}-${lang}` }, props: { kind, lang } }));
 }
 const { kind, lang } = Astro.props;
 const label = { home: "", resume: "Resume" }[kind];

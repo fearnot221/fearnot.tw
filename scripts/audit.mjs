@@ -8,7 +8,7 @@ import * as chromeLauncher from "chrome-launcher";
 
 const PORT = 4398;
 const BASE = `http://localhost:${PORT}`;
-const PAGES = ["/", "/en/", "/resume/", "/en/resume/"];
+const PAGES = ["/", "/en/", "/resume/"];
 const LH_PAGES = ["/", "/resume/"];
 
 const server = spawn("node_modules/.bin/astro", ["preview", "--port", String(PORT)], { stdio: ["ignore", "pipe", "inherit"] });

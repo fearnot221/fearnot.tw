@@ -1,5 +1,5 @@
 // Generates the static assets that need a real browser:
-//   public/pdf/*.pdf  Resume (zh + en), one A4 page, via the print stylesheet
+//   public/pdf/*.pdf  Resume (zh only), one A4 page, via the print stylesheet
 //   public/og/*.png   1200×630 social cards rendered from /og/[slug]
 // Usage: npm run assets  (builds, serves dist/ locally, renders, stops the server). Rerun after editing content.
 import { spawn, spawnSync } from "node:child_process";
@@ -9,7 +9,6 @@ import { chromium } from "playwright";
 const PORT = 4399;
 const jobs = [
   { path: "/resume/", out: "resume-zh.pdf", maxPages: 1 },
-  { path: "/en/resume/", out: "resume-en.pdf", maxPages: 1 },
 ];
 
 const server = spawn("node_modules/.bin/astro", ["preview", "--port", String(PORT)], { stdio: ["ignore", "pipe", "inherit"] });
@@ -34,12 +33,12 @@ try {
   }
   await mkdir("public/og", { recursive: true });
   const og = await browser.newPage({ viewport: { width: 1200, height: 630 } });
-  for (const kind of ["home", "resume"]) for (const lang of ["zh", "en"]) {
-    await og.goto(`http://localhost:${PORT}/og/${kind}-${lang}/`, { waitUntil: "networkidle" });
+  for (const slug of ["home-zh", "home-en", "resume-zh"]) {
+    await og.goto(`http://localhost:${PORT}/og/${slug}/`, { waitUntil: "networkidle" });
     await og.evaluate(() => document.fonts.ready);
-    await og.screenshot({ path: `public/og/${kind}-${lang}.png`, clip: { x: 0, y: 0, width: 1200, height: 630 } });
+    await og.screenshot({ path: `public/og/${slug}.png`, clip: { x: 0, y: 0, width: 1200, height: 630 } });
   }
-  console.log("public/og/*.png          4 cards");
+  console.log("public/og/*.png          3 cards");
 } finally {
   await browser.close();
   server.kill();
