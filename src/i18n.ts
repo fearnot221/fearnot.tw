@@ -4,6 +4,7 @@ export const htmlLang: Record<Lang, "zh-Hant-TW" | "en"> = { zh: "zh-Hant-TW", e
 
 export const ui = {
   experience: { zh: "經歷", en: "Experience" },
+  communities: { zh: "社群", en: "Communities" },
   education: { zh: "學歷", en: "Education" },
   skills: { zh: "技能", en: "Skills" },
   awardsCerts: { zh: "獎項與證照", en: "Awards & Certifications" },

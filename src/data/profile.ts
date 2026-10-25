@@ -29,6 +29,12 @@ export interface Org {
 
 export type Role = Pick<Entry, "start" | "end" | "title" | "summary" | "details">;
 
+export interface Community {
+  name: T;
+  href?: string;
+  summary?: T;
+}
+
 export interface Item {
   year?: string;
   title: T;
@@ -183,6 +189,14 @@ export const experience: Org[] = [
       },
     ],
   },
+];
+
+// communities I take part in, shown on the homepage; href and summary are optional
+export const communities: Community[] = [
+  { name: { zh: "SCIST 南臺灣學生資訊社群", en: "SCIST" }, href: "https://scist.org" },
+  { name: { zh: "SITCON 學生計算機年會", en: "SITCON" }, href: "https://sitcon.org" },
+  { name: { zh: "MOPCON", en: "MOPCON" }, href: "https://mopcon.org" },
+  { name: { zh: "AIS3 Club", en: "AIS3 Club" } },
 ];
 
 export const education: Entry[] = [
