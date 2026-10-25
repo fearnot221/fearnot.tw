@@ -1,16 +1,14 @@
 ---
 // The Resume as a real document: one A4 sheet, identical on screen and on paper.
-// It deliberately drops the website's language (mono labels, motion, accent colour) for résumé conventions.
+// Chinese only; both names are shown. It deliberately drops the website's language (mono labels, motion, accent colour) for résumé conventions.
 import Base from "../layouts/Base.astro";
-import LangSwitch from "./LangSwitch.astro";
-import { person, experience, education, skills, awards, certifications, projects, type Lang, type Entry, type T } from "../data/profile";
+import { person, experience, education, skills, awards, certifications, projects, type Entry, type T } from "../data/profile";
 import { ui, pathFor } from "../i18n";
 import { docLd } from "../seo";
 
-interface Props { lang: Lang }
-const { lang } = Astro.props;
+const lang = "zh";
 const onResume = <X extends { resume?: boolean }>(xs: X[]) => xs.filter((x) => x.resume);
-const name = person.name[lang];
+const name = person.name.zh;
 const path = "/resume/";
 const pdf = `/pdf/resume-${lang}.pdf`;
 const fileName = `${name.replace(/\s+/g, "-")}-Resume.pdf`;
@@ -22,11 +20,10 @@ const contact = [
   { text: "fearnot.tw", href: "https://fearnot.tw" },
 ];
 ---
-<Base theme="paper" title={`Resume — ${name}`} description={`${name} (Fearnot) — Resume. ${person.summary[lang]}`} lang={lang} path={path} ogImage={`/og/resume-${lang}.png`} jsonld={docLd(lang, new URL(pathFor(lang, path), Astro.site).href)}>
+<Base theme="paper" title={`Resume — ${name}`} description={`${name} ${person.name.en} (Fearnot) — Resume. ${person.summary[lang]}`} lang={lang} path={path} monolingual ogImage={`/og/resume-${lang}.png`} jsonld={docLd(lang, new URL(pathFor(lang, path), Astro.site).href)}>
   <header class="toolbar top mono">
     <a class="home" href={pathFor(lang, "/")}>← fearnot.tw</a>
     <div class="actions">
-      <LangSwitch lang={lang} path={path} />
       <button type="button" class="doc" data-print>{ui.print[lang]}</button>
       <a class="doc" href={pdf} download={fileName}><span class="wide">{ui.download[lang]} </span>PDF</a>
     </div>
@@ -35,7 +32,7 @@ const contact = [
   <main id="main" class="sheet">
     <header class="r-head">
       <div>
-        <h1>{name}</h1>
+        <h1>{name}<span class="r-en" lang="en">{person.name.en}</span></h1>
         <p class="r-sub">Fearnot · {person.roles[lang]}</p>
       </div>
       <ul class="r-contact">
@@ -47,6 +44,12 @@ const contact = [
     <section aria-labelledby="summary">
       <h2 id="summary">{ui.summary[lang]}</h2>
       <p>{person.summary[lang]}</p>
+    </section>
+    <section aria-labelledby="skills">
+      <h2 id="skills">{ui.skills[lang]}</h2>
+      <dl class="r-skills">
+        {skills.map((k) => <><dt>{k.group}</dt><dd>{k.items[lang]}</dd></>)}
+      </dl>
     </section>
 
     <section aria-labelledby="education">
@@ -80,12 +83,6 @@ const contact = [
       ))}
     </section>
 
-    <section aria-labelledby="skills">
-      <h2 id="skills">{ui.skills[lang]}</h2>
-      <dl class="r-skills">
-        {skills.map((k) => <><dt>{k.group}</dt><dd>{k.items[lang]}</dd></>)}
-      </dl>
-    </section>
   </main>
 </Base>
 
@@ -114,7 +111,7 @@ const contact = [
 
     .r-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12pt; padding-bottom: 8pt; border-bottom: 1.2pt solid var(--ink); }
     .r-head h1 { font: 600 22pt / 1.1 var(--font-serif); letter-spacing: .06em; }
-    :global(:root:lang(en)) .r-head h1 { letter-spacing: 0; }
+    .r-en { margin-left: .5em; font-size: 13pt; font-weight: 400; letter-spacing: .02em; color: var(--soft); }
     .r-sub { color: var(--soft); margin-top: 3pt; }
     .r-contact { text-align: right; font-size: 8.5pt; line-height: 1.55; color: var(--soft); }
 
@@ -149,6 +146,7 @@ const contact = [
       .r-head { flex-direction: column; align-items: flex-start; }
       .r-contact { text-align: left; font-size: 13px; }
       .r-head h1 { font-size: 28px; }
+      .r-en { font-size: 18px; }
       .r-date, .sheet h2 { font-size: 13px; }
       .r-row { flex-direction: column; gap: 0; }
       .r-date { order: -1; }
