@@ -18,7 +18,7 @@ export interface Entry {
 }
 
 // One organisation; several roles in it share the org line, and `summary` here covers them all.
-// `kind` picks the home page section: work → 學經歷 (after the schools), talk → 授課與分享, community → 社群
+// `kind` picks the home page section: work → 工作經歷, talk → 授課與分享, community → 社群
 export interface Org {
   kind: "work" | "talk" | "community";
   org: T;
@@ -114,27 +114,32 @@ export const experience: Org[] = [
   },
   {
     kind: "community",
-    org: { zh: "SITCON 2026 學生計算機年會", en: "SITCON 2026" },
+    org: { zh: "SITCON 學生計算機年會", en: "SITCON" },
     href: "https://sitcon.org",
     roles: [
       {
         start: "2025",
         end: "2026",
-        title: { zh: "場務組 組長", en: "Venue Team Lead" },
+        title: { zh: "SITCON 2026 場務組 組長", en: "SITCON 2026, Venue Team Lead" },
         summary: {
           zh: "管理年會場地相關事務，並規劃 SITCON Hour of Code 南部場。",
           en: "Ran venue operations for the conference and is planning the southern SITCON Hour of Code.",
         },
-        details: [
-          {
-            zh: "SITCON 2025 場務組機動股股長：協助報到、場地機動、餐飲與物流規劃。",
-            en: "SITCON 2025, venue floor team lead: registration, on-site logistics, catering and supplies.",
-          },
-          {
-            zh: "SITCON Camp 2025 庶務組組長：負責營隊住宿與場地。",
-            en: "SITCON Camp 2025, operations lead: lodging and venues.",
-          },
-        ],
+      },
+      {
+        start: "2025",
+        end: "2025",
+        title: { zh: "SITCON 2025 場務組 機動股股長", en: "SITCON 2025, Venue Floor Team Lead" },
+        summary: {
+          zh: "協助報到、場地機動、餐飲與物流規劃。",
+          en: "Registration, on-site logistics, catering and supplies.",
+        },
+      },
+      {
+        start: "2025",
+        end: "2025",
+        title: { zh: "SITCON Camp 2025 庶務組 組長", en: "SITCON Camp 2025, Operations Lead" },
+        summary: { zh: "負責營隊住宿與場地。", en: "Lodging and venues." },
       },
     ],
   },
@@ -180,20 +185,21 @@ export const experience: Org[] = [
     href: "https://mopcon.org",
     roles: [
       {
-        start: "2024",
+        start: "2025",
         end: "2025",
         title: { zh: "場務組 副組長", en: "Deputy Venue Lead" },
-        summary: {
-          zh: "2024 年擔任組員，2025 年擔任副組長。",
-          en: "Crew in 2024, deputy lead in 2025.",
-        },
+      },
+      {
+        start: "2024",
+        end: "2024",
+        title: { zh: "場務組 組員", en: "Venue Crew" },
       },
     ],
   },
 ];
 
+// listed under the self-introduction on the home page, in this order; `end` may be "Est. 2030" for a degree in progress
 export const education: Entry[] = [
-  // TODO: add the university once confirmed
   {
     start: "2023",
     end: "2026",
@@ -201,6 +207,12 @@ export const education: Entry[] = [
       zh: "國立鳳山高級中學",
       en: "National Fengshan Senior High School",
     },
+    org: { zh: "", en: "" },
+  },
+  {
+    start: "2026",
+    end: "Est. 2030",
+    title: { zh: "國立中央大學 資訊工程學系", en: "National Central University, Computer Science and Information Engineering" },
     org: { zh: "", en: "" },
   },
 ];

@@ -19,15 +19,15 @@ const span = (o: Org) => range({
 type Row = { name: string; href?: string; when?: string; roles: { title: string; when?: string; note?: string }[]; note?: string };
 const fromEntry = (e: Entry): Row => ({ name: e.title[lang], href: e.href, when: range(e), roles: e.org[lang] ? [{ title: e.org[lang] }] : [], note: e.summary?.[lang] });
 const fromItem = (i: Item): Row => ({ name: i.title[lang], when: i.year, roles: [] });
-// a role's own years only when they differ from the organisation's
+// with several roles each one shows its own years; a single role only when they differ from the organisation's
 const fromOrg = (o: Org): Row => ({
   name: o.org[lang], href: o.href, when: span(o), note: o.summary?.[lang],
-  roles: o.roles.map((r) => ({ title: r.title[lang], when: range(r) !== span(o) ? range(r) : undefined, note: r.summary?.[lang] })),
+  roles: o.roles.map((r) => ({ title: r.title[lang], when: o.roles.length > 1 || range(r) !== span(o) ? range(r) : undefined, note: r.summary?.[lang] })),
 });
 const byKind = (kind: Org["kind"]) => experience.filter((o) => o.kind === kind).map(fromOrg);
 // a section with no items yet is left out
 const sections = [
-  { id: "learning", label: ui.learning, rows: [...education.map(fromEntry), ...byKind("work")] },
+  { id: "work", label: ui.work, rows: byKind("work") },
   { id: "certifications", label: ui.certifications, rows: certifications.map(fromItem) },
   { id: "competitions", label: ui.competitions, rows: awards.map(fromItem) },
   { id: "talks", label: ui.talks, rows: byKind("talk") },
@@ -83,6 +83,9 @@ const icons: Record<string, { box: string; fill?: boolean; d: string[] }> = {
           </figure>
         </div>
         <p class="lede">{person.lede[lang]}</p>
+        <ul class="edu">
+          {education.map((e) => <li><span>{e.title[lang]}</span><span class="mono muted">{range(e)}</span></li>)}
+        </ul>
       </div>
 
       {sections.map((s) => (
@@ -187,6 +190,9 @@ const icons: Record<string, { box: string; fill?: boolean; d: string[] }> = {
     /* the lede is the largest text on screen: it paints at once, never behind an animation */
     .lede { font-size: var(--step-2); line-height: 1.65; max-width: 30em; margin-top: var(--space-4); text-wrap: pretty; }
     :global(:root:lang(en)) .lede { line-height: 1.5; }
+    .edu { max-width: 36rem; margin-top: var(--space-3); }
+    .edu li { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); padding-block: .2rem; }
+    .edu .mono { flex: none; white-space: nowrap; }
 
     .rows a { text-decoration-color: var(--color-rule); }
     .rows .role { display: block; font-size: var(--step--1); margin-top: .2rem; }
