@@ -3,20 +3,38 @@ import Base from "../layouts/Base.astro";
 import LangSwitch from "./LangSwitch.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 import { getImage } from "astro:assets";
-import { person, experience, communities, awards, certifications, projects, footerGifs, reservedGifSlots, type Lang, type Org, type Role } from "../data/profile";
+import { person, experience, education, training, awards, certifications, projects, footerGifs, reservedGifSlots, type Lang, type Org, type Role, type Entry, type Item } from "../data/profile";
 import { ui, pathFor } from "../i18n";
 import { homeLd } from "../seo";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
-const onResume = <X extends { resume?: boolean }>(xs: X[]) => xs.filter((x) => x.resume);
-const honors = [...onResume(awards), ...onResume(certifications)];
 const range = (r: Pick<Role, "start" | "end">) => (r.start === r.end ? r.start : `${r.start} — ${r.end ?? ui.present[lang]}`);
 // the community's years run from its first role's start to its last role's end (an open role keeps it open)
 const span = (o: Org) => range({
   start: o.roles.map((r) => r.start).sort()[0],
   end: o.roles.some((r) => !r.end) ? undefined : o.roles.map((r) => r.end!).sort().at(-1),
 });
+// every section is one list: name on the left with roles (and optional notes) under it, years on the right
+type Row = { name: string; href?: string; when?: string; roles: { title: string; when?: string; note?: string }[]; note?: string };
+const fromEntry = (e: Entry): Row => ({ name: e.title[lang], href: e.href, when: range(e), roles: e.org[lang] ? [{ title: e.org[lang] }] : [], note: e.summary?.[lang] });
+const fromItem = (i: Item): Row => ({ name: i.title[lang], when: i.year, roles: [] });
+// a role's own years only when they differ from the organisation's
+const fromOrg = (o: Org): Row => ({
+  name: o.org[lang], href: o.href, when: span(o), note: o.summary?.[lang],
+  roles: o.roles.map((r) => ({ title: r.title[lang], when: range(r) !== span(o) ? range(r) : undefined, note: r.summary?.[lang] })),
+});
+const byKind = (kind: Org["kind"]) => experience.filter((o) => o.kind === kind).map(fromOrg);
+// a section with no items yet is left out
+const sections = [
+  { id: "learning", label: ui.learning, rows: [...education, ...training].map(fromEntry) },
+  { id: "work", label: ui.work, rows: byKind("work") },
+  { id: "certifications", label: ui.certifications, rows: certifications.map(fromItem) },
+  { id: "competitions", label: ui.competitions, rows: awards.map(fromItem) },
+  { id: "talks", label: ui.talks, rows: byKind("talk") },
+  { id: "communities", label: ui.communities, rows: byKind("community") },
+  { id: "projects", label: ui.projects, rows: projects.map(fromEntry) },
+].filter((s) => s.rows.length);
 // fetched from Gravatar at build time and served from this site as a small webp
 // Astro fetches remote images late in the build and fails it on a 404, so check first:
 // an unreachable or missing Gravatar falls back to the empty frame instead of breaking the deploy
@@ -31,7 +49,6 @@ const icons: Record<string, { box: string; fill?: boolean; d: string[] }> = {
 };
 ---
 <Base title={`Fearnot — ${person.roles[lang]}`} description={person.lede[lang]} lang={lang} path="/" ogImage={`/og/home-${lang}.png`} jsonld={homeLd(lang)}>
-  <link slot="head" rel="preload" href="/fonts/literata-display.woff2" as="font" type="font/woff2" crossorigin />
   <div class="page">
     <header class="top mono">
       <a class="home" href={pathFor(lang, "/")} aria-current="page"><span class="status link-up" aria-hidden="true" data-port></span>fearnot.tw</a>
@@ -69,53 +86,28 @@ const icons: Record<string, { box: string; fill?: boolean; d: string[] }> = {
         <p class="lede">{person.lede[lang]}</p>
       </div>
 
-      <section class="section" aria-labelledby="experience">
-        <h2 class="label" id="experience">{ui.experience[lang]}</h2>
-        <ol class="entries reveal">
-          {onResume(experience).map((o) => (
-            <li>
-              <span class="when mono">{span(o)}</span>
-              <span class="org">{o.org[lang]}</span>
-              {o.roles.map((r) => (
-                <div class="role">
-                  {/* a role's own years only when they differ from the community's */}
-                  <h3>{r.title[lang]}{range(r) !== span(o) && <span class="role-when mono">{range(r)}</span>}</h3>
-                  {r.summary && <p>{r.summary[lang]}</p>}
+      {sections.map((s) => (
+        <section class="section" aria-labelledby={s.id}>
+          <h2 class="label" id={s.id}>{s.label[lang]}</h2>
+          <ul class="list rows reveal">
+            {s.rows.map((r) => (
+              <li>
+                <div>
+                  <span class="item">{r.href ? <a href={r.href}>{r.name}</a> : r.name}</span>
+                  {r.roles.map((role) => (
+                    <Fragment>
+                      <span class="role">{role.title}{role.when && <span class="role-when mono">{role.when}</span>}</span>
+                      {role.note && <small>{role.note}</small>}
+                    </Fragment>
+                  ))}
+                  {r.note && <small>{r.note}</small>}
                 </div>
-              ))}
-              {o.summary && <p class="shared">{o.summary[lang]}</p>}
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section class="section" aria-labelledby="communities">
-        <h2 class="label" id="communities">{ui.communities[lang]}</h2>
-        <ul class="list projects reveal">
-          {communities.map((c) => (
-            <li><span>{c.href ? <a href={c.href}>{c.name[lang]}</a> : c.name[lang]}{c.summary && <small>{c.summary[lang]}</small>}</span></li>
-          ))}
-        </ul>
-      </section>
-
-      <section class="section" aria-labelledby="honors">
-        <h2 class="label" id="honors">{ui.awardsCerts[lang]}</h2>
-        <ul class="list reveal">
-          {honors.map((h) => <li><span>{h.title[lang]}</span><span class="mono muted">{h.year}</span></li>)}
-        </ul>
-      </section>
-
-      <section class="section" aria-labelledby="projects">
-        <h2 class="label" id="projects">{ui.projects[lang]}</h2>
-        <ul class="list projects reveal">
-          {projects.map((p) => (
-            <li>
-              <span><a href={p.href}>{p.title[lang]}</a>{p.summary && <small>{p.summary[lang]}</small>}</span>
-              <span class="mono muted">{p.start}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+                {r.when && <span class="when mono muted">{r.when}</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
 
     </main>
 
@@ -197,11 +189,11 @@ const icons: Record<string, { box: string; fill?: boolean; d: string[] }> = {
     .lede { font-size: var(--step-2); line-height: 1.65; max-width: 30em; margin-top: var(--space-4); text-wrap: pretty; }
     :global(:root:lang(en)) .lede { line-height: 1.5; }
 
-    .entries h3 a { text-decoration-color: var(--color-rule); }
-    .role + .role, .shared { margin-top: var(--space-2); }
-    .role-when { font-size: var(--step--1); font-weight: 400; color: var(--color-text-muted); margin-left: .6em; }
-    .projects a { text-decoration-color: var(--color-rule); }
-    .projects small { display: block; font-size: var(--step--1); line-height: 1.6; color: var(--color-text-muted); margin-top: .15rem; }
+    .rows a { text-decoration-color: var(--color-rule); }
+    .rows .role { display: block; font-size: var(--step--1); margin-top: .2rem; }
+    .rows .role-when { color: var(--color-text-muted); margin-left: .6em; }
+    .rows small { display: block; font-size: var(--step--1); line-height: 1.6; color: var(--color-text-muted); margin-top: .15rem; text-wrap: pretty; }
+    .rows .when { flex: none; white-space: nowrap; }
     .list li { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); padding-block: var(--space-2); }
     .list li + li { border-top: var(--border); }
     .list li:first-child { padding-top: 0; }

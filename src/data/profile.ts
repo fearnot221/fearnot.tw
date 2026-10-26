@@ -1,7 +1,6 @@
-// Single source of truth for the home page and the Resume.
+// Content of the home page (both languages). The Resume keeps its own content in resume.ts.
 // Every user-facing string is bilingual. Items marked TODO still need confirmation.
-// `resume: true` puts an item on the Resume and the home page. Items without it, `details`, `training`
-// and `roles` are not shown anywhere since the CV was removed; they are kept as the full record.
+// `details` and `roles` are not shown anywhere; they are kept as the full record.
 
 import { createHash } from "node:crypto";
 
@@ -16,29 +15,23 @@ export interface Entry {
   summary?: T;
   details?: T[]; // not shown (full record)
   href?: string;
-  resume?: boolean;
 }
 
-// One community; several roles in it share the org line, and `summary` here covers them all
+// One organisation; several roles in it share the org line, and `summary` here covers them all.
+// `kind` picks the home page section: work → 工作經歷, talk → 演講或講課, community → 社群
 export interface Org {
+  kind: "work" | "talk" | "community";
   org: T;
   roles: Role[];
   summary?: T;
-  resume?: boolean;
+  href?: string;
 }
 
 export type Role = Pick<Entry, "start" | "end" | "title" | "summary" | "details">;
 
-export interface Community {
-  name: T;
-  href?: string;
-  summary?: T;
-}
-
 export interface Item {
   year?: string;
   title: T;
-  resume?: boolean;
 }
 
 const EMAIL = "kenin221@gmail.com";
@@ -56,10 +49,6 @@ export const person = {
     zh: "嗨！我是 Fearnot ，長期貢獻於社群領域，熱衷於參加各種活動，目前鑽研於資訊安全及網路維運相關領域。",
     en: "Hi! I'm Fearnot, an active contributor to various communities with a passion for participating in all kinds of events. I'm currently focusing on cybersecurity and network operations.",
   } as T,
-  summary: {
-    zh: "專注於資訊安全與網路維運。具備滲透測試、Web 安全、數位鑑識與封包分析的實務經驗，熟悉 Linux 系統管理與網路服務維運，並能以 Python、TypeScript 開發全端應用與自動化工具。長期投入南臺灣資訊教育，擅長技術課程規劃與社群經營。",
-    en: "Focused on information security and network operations. Hands-on with penetration testing, web security, digital forensics and packet analysis; experienced in Linux administration and running network services; builds full-stack apps and automation in Python and TypeScript. Long involved in tech education in southern Taiwan, designing courses and building communities.",
-  } as T,
   /** Gravatar of the contact email; set to undefined to show the empty frame instead */
   avatar: gravatar(EMAIL, 320) as string | undefined,
   location: { zh: "臺灣", en: "Taiwan" } as T,
@@ -76,7 +65,9 @@ export const person = {
 
 export const experience: Org[] = [
   {
+    kind: "community",
     org: { zh: "SCIST 南臺灣學生資訊社群", en: "SCIST" },
+    href: "https://scist.org",
     roles: [
       {
         start: "2024",
@@ -101,6 +92,12 @@ export const experience: Org[] = [
           },
         ],
       },
+    ],
+  },
+  {
+    kind: "talk",
+    org: { zh: "SCIST 南臺灣學生資訊社群", en: "SCIST" },
+    roles: [
       {
         start: "2024",
         end: "2026",
@@ -114,10 +111,11 @@ export const experience: Org[] = [
         },
       },
     ],
-    resume: true,
   },
   {
+    kind: "community",
     org: { zh: "SITCON 2026 學生計算機年會", en: "SITCON 2026" },
+    href: "https://sitcon.org",
     roles: [
       {
         start: "2025",
@@ -139,9 +137,9 @@ export const experience: Org[] = [
         ],
       },
     ],
-    resume: true,
   },
   {
+    kind: "community",
     org: {
       zh: "六校聯合寒訓、SCIST × 南十五校聯合寒訓",
       en: "Six-School & SCIST × 15-School Winter Camps",
@@ -159,6 +157,7 @@ export const experience: Org[] = [
     ],
   },
   {
+    kind: "talk",
     org: { zh: "AIS3 Club", en: "AIS3 Club" },
     roles: [
       {
@@ -176,7 +175,9 @@ export const experience: Org[] = [
     ],
   },
   {
+    kind: "community",
     org: { zh: "MOPCON", en: "MOPCON" },
+    href: "https://mopcon.org",
     roles: [
       {
         start: "2024",
@@ -191,14 +192,6 @@ export const experience: Org[] = [
   },
 ];
 
-// communities I take part in, shown on the homepage; href and summary are optional
-export const communities: Community[] = [
-  { name: { zh: "SCIST 南臺灣學生資訊社群", en: "SCIST" }, href: "https://scist.org" },
-  { name: { zh: "SITCON 學生計算機年會", en: "SITCON" }, href: "https://sitcon.org" },
-  { name: { zh: "MOPCON", en: "MOPCON" }, href: "https://mopcon.org" },
-  { name: { zh: "AIS3 Club", en: "AIS3 Club" } },
-];
-
 export const education: Entry[] = [
   // TODO: add the university once confirmed
   {
@@ -209,7 +202,6 @@ export const education: Entry[] = [
       en: "National Fengshan Senior High School",
     },
     org: { zh: "", en: "" },
-    resume: true,
   },
 ];
 
@@ -275,7 +267,6 @@ export const awards: Item[] = [
       zh: "第 55 屆全國技能競賽 南區分賽 網路安全職類 第一名",
       en: "1st place, Cyber Security, 55th National Skills Competition (Southern Regional)",
     },
-    resume: true,
   },
   {
     year: "2025",
@@ -283,7 +274,6 @@ export const awards: Item[] = [
       zh: "InfoSec Taiwan CTF 2025 高中組 第二名",
       en: "2nd place, high school division, InfoSec Taiwan CTF 2025",
     },
-    resume: true,
   },
   {
     year: "2025",
@@ -291,7 +281,6 @@ export const awards: Item[] = [
       zh: "HITCON CTF 2025 第 32 名／1,289 隊（臺灣第五）",
       en: "HITCON CTF 2025: 32nd of 1,289 teams (5th in Taiwan)",
     },
-    resume: true,
   },
   {
     year: "2025",
@@ -299,7 +288,6 @@ export const awards: Item[] = [
       zh: "AIS3 EOF 進階資安攻防演練 決賽第八名、最佳藍色小精靈獎",
       en: "AIS3 EOF Finals: 8th place and Best Blue Team award",
     },
-    resume: true,
   },
   {
     year: "2025",
@@ -350,7 +338,6 @@ export const certifications: Item[] = [
       zh: "iPAS 資訊安全工程師 中級",
       en: "iPAS Information Security Engineer, Intermediate",
     },
-    resume: true,
   },
   {
     year: "2025",
@@ -358,7 +345,6 @@ export const certifications: Item[] = [
       zh: "APCS 程式設計觀念 4 級、實作 3 級",
       en: "APCS: Concepts level 4, Implementation level 3",
     },
-    resume: true,
   },
   {
     year: "2024",
@@ -496,7 +482,6 @@ export const projects: Entry[] = [
       en: "Code-based role claiming and batch role grants that streamline community admin.",
     },
     href: "https://github.com/fearnot221/scist-bot",
-    resume: true,
   },
   {
     start: "2025",
@@ -511,7 +496,6 @@ export const projects: Entry[] = [
       zh: "建立 Discord 群組整理各校特選簡章、日程與歷屆心得，並開發 bot 簡化身分審核。",
       en: "Discord community gathering special admission rules, dates and applicants' notes, with a bot for identity checks.",
     },
-    resume: true,
   },
   {
     start: "2025",

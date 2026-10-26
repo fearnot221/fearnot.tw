@@ -36,10 +36,11 @@
     --color-selection: rgb(232 160 74 / .28);
 
     /* ── type: families ── */
-    --font-serif: "Literata", "Noto Serif TC", "Songti TC", serif;
-    --font-display: "Literata Display", "Literata", "Noto Serif TC", serif;
-    /* CJK inside small mono labels uses the system sans: crisp at 12px and zero bytes */
-    --font-mono: "Fragment Mono", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", ui-monospace, monospace;
+    /* Latin is set entirely in monospace; CJK falls through to Noto Sans TC */
+    --font-text: "JetBrains Mono", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", ui-monospace, monospace;
+    --font-display: var(--font-text);
+    /* CJK inside small mono labels uses the system sans: crisp at 12px and zero bytes (the zh switch on English pages stays free) */
+    --font-mono: "JetBrains Mono", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", ui-monospace, monospace;
 
     /* ── type: fluid scale (360px → 1280px viewport) ── */
     --step--1: clamp(.75rem, .73rem + .08vw, .8125rem);
