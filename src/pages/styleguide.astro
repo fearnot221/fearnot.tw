@@ -57,9 +57,9 @@ const motion = [
       <h2 class="label" id="t">字體</h2>
       <div class="content">
         <dl class="families">
-          <dt class="mono">Display</dt><dd style="font-family: var(--font-display); font-weight: 600">Fearnot <span class="muted mono">Literata · opsz 72 · 僅含 7 字</span></dd>
-          <dt class="mono">Serif</dt><dd>Literata ＋ 思源宋體 Noto Serif TC</dd>
-          <dt class="mono">Mono</dt><dd class="mono" style="font-size: var(--step-1)">Fragment Mono ＋ 系統黑體（PingFang TC／微軟正黑體）</dd>
+          <dt class="mono">Display</dt><dd style="font-family: var(--font-display); font-weight: 600">Fearnot <span class="muted mono">JetBrains Mono · 600</span></dd>
+          <dt class="mono">Text</dt><dd>JetBrains Mono ＋ 思源黑體 Noto Sans TC</dd>
+          <dt class="mono">Mono</dt><dd class="mono" style="font-size: var(--step-1)">JetBrains Mono ＋ 系統黑體（PingFang TC／微軟正黑體）</dd>
         </dl>
         <ol class="scale">
           {steps.map((s) => (
@@ -145,7 +145,7 @@ const motion = [
 <style>
   @layer components {
     .hero { padding-block: clamp(3rem, 1.5rem + 6vw, 6rem) var(--section); }
-    .hero h1 { font: 600 var(--step-4) / var(--leading-display) var(--font-serif); letter-spacing: var(--tracking-display); } /* display subset only covers "Fearnot" */
+    .hero h1 { font: 600 var(--step-4) / var(--leading-display) var(--font-text); letter-spacing: var(--tracking-display); } /* display subset only covers "Fearnot" */
     .lede { font-size: var(--step-2); line-height: 1.65; margin-top: var(--space-3); max-width: 30em; text-wrap: pretty; }
 
     .swatches li { display: grid; grid-template-columns: 2.5rem minmax(0, 1.3fr) minmax(0, 1fr) 6.5rem; gap: var(--space-2); align-items: center; padding-block: .6rem; }

@@ -18,19 +18,16 @@ const TEXT_EXT = new Set(FROM_DIST ? [".html"] : [".astro", ".ts", ".md", ".mdx"
 const SKIP = new Set(["src/pages/styleguide.astro", "dist/styleguide/index.html"]);
 const GF = "https://raw.githubusercontent.com/google/fonts/main/ofl/";
 
-const DISPLAY = "Fearnot";
 // ASCII plus the typographic marks copy actually uses; full Latin-1 would add ~100 unused accented glyphs
 const LATIN = range(0x20, 0x7e) + "\u00a0©·×éèüöä–—‘’“”…•→←↑↓↗€";
 
 const fonts = [
-  // body text: optical size pinned to text size, which halves the file
-  { src: "literata/Literata[opsz,wght].ttf", out: "literata.woff2", text: () => LATIN, axes: { opsz: 18, wght: { min: 400, max: 600 } } },
-  // display: only the glyphs of the hero name, cut at the display optical size
-  { src: "literata/Literata[opsz,wght].ttf", out: "literata-display.woff2", text: () => DISPLAY, axes: { opsz: 72, wght: 600 } },
-  { src: "fragmentmono/FragmentMono-Regular.ttf", out: "fragment-mono.woff2", text: () => LATIN },
+  // all Latin text is monospace; one variable cut covers regular and bold.
+  // Skipping the layout closure drops the code ligatures (-> != www): half the file, and prose should not ligate
+  { src: "jetbrainsmono/JetBrainsMono[wght].ttf", out: "jetbrains-mono.woff2", text: () => LATIN, axes: { wght: { min: 400, max: 600 } }, noLayoutClosure: true },
   // two static cuts are ~40% smaller than one variable file; bold only needs the glyphs that are ever set bold
-  { src: "notoseriftc/NotoSerifTC[wght].ttf", out: "noto-serif-tc-400.woff2", text: cjk, axes: { wght: 400 } },
-  { src: "notoseriftc/NotoSerifTC[wght].ttf", out: "noto-serif-tc-600.woff2", text: cjkBold, axes: { wght: 600 } },
+  { src: "notosanstc/NotoSansTC[wght].ttf", out: "noto-sans-tc-400.woff2", text: cjk, axes: { wght: 400 } },
+  { src: "notosanstc/NotoSansTC[wght].ttf", out: "noto-sans-tc-600.woff2", text: cjkBold, axes: { wght: 600 } },
 ];
 
 function range(a, b) { let s = ""; for (let i = a; i <= b; i++) s += String.fromCodePoint(i); return s; }
@@ -57,14 +54,18 @@ async function cjk() {
   }
   // always keep CJK punctuation and full-width forms so new copy never falls back mid-sentence
   for (const ch of "，。、；：？！「」『』（）《》〈〉【】—…・～　％＃＆＊＋－／＝") chars.add(ch);
-  return (cjkCache = " " + [...chars].join("")); // Latin comes from Literata / Fragment Mono
+  return (cjkCache = " " + [...chars].join("")); // Latin comes from JetBrains Mono
 }
 
 // bold CJK appears only in section headings, entry titles and the real name; read them from the source itself
 async function cjkBold() {
   const data = await import(new URL("../src/data/profile.ts", import.meta.url).href);
+  const { resume } = await import(new URL("../src/data/resume.ts", import.meta.url).href);
   const { ui } = await import(new URL("../src/i18n.ts", import.meta.url).href);
   const titles = [data.person.name, ...Object.values(ui), ...data.experience.flatMap((o) => [o.org, ...o.roles.map((r) => r.title)]), ...[data.education, data.projects].flat().flatMap((e) => [e.title, e.org])];
+  // the Resume is plain zh strings: bold role, school and project titles
+  const resumeTitles = [...resume.education, ...resume.experience.flatMap((o) => o.roles), ...resume.projects].map((e) => e.title);
+  titles.push(...resumeTitles.map((zh) => ({ zh })));
   return " " + [...new Set(titles.flatMap((t) => [...t.zh]).filter((ch) => ch.codePointAt(0) > 0x2e7f))].join("") + "，、（）／";
 }
 
@@ -90,7 +91,7 @@ await mkdir(CACHE, { recursive: true });
 await mkdir(OUT, { recursive: true });
 for (const f of fonts) {
   const text = await f.text();
-  const buf = await subsetFont(await source(f.src), text, { targetFormat: "woff2", variationAxes: f.axes });
+  const buf = await subsetFont(await source(f.src), text, { targetFormat: "woff2", variationAxes: f.axes, noLayoutClosure: f.noLayoutClosure });
   await writeFile(join(OUT, f.out), buf);
   if (FROM_DIST) await writeFile(join(ROOT, "dist/fonts", f.out), buf);
   console.log(`${f.out.padEnd(22)} ${(buf.length / 1024).toFixed(1).padStart(7)} KB  (${[...text].length} glyphs requested)`);

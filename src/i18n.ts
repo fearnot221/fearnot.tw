@@ -5,6 +5,11 @@ export const htmlLang: Record<Lang, "zh-Hant-TW" | "en"> = { zh: "zh-Hant-TW", e
 export const ui = {
   experience: { zh: "經歷", en: "Experience" },
   communities: { zh: "社群", en: "Communities" },
+  learning: { zh: "學經歷", en: "Education & Training" },
+  work: { zh: "工作經歷", en: "Work Experience" },
+  certifications: { zh: "證照", en: "Certifications" },
+  competitions: { zh: "比賽", en: "Competitions" },
+  talks: { zh: "演講或講課", en: "Talks & Teaching" },
   education: { zh: "學歷", en: "Education" },
   skills: { zh: "技能", en: "Skills" },
   awardsCerts: { zh: "獎項與證照", en: "Awards & Certifications" },
