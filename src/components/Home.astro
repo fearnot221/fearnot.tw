@@ -27,12 +27,11 @@ const fromOrg = (o: Org): Row => ({
 const byKind = (kind: Org["kind"]) => experience.filter((o) => o.kind === kind).map(fromOrg);
 // a section with no items yet is left out
 const sections = [
-  { id: "learning", label: ui.learning, rows: [...education, ...training].map(fromEntry) },
-  { id: "work", label: ui.work, rows: byKind("work") },
+  { id: "learning", label: ui.learning, rows: [...education.map(fromEntry), ...byKind("work")] },
   { id: "certifications", label: ui.certifications, rows: certifications.map(fromItem) },
   { id: "competitions", label: ui.competitions, rows: awards.map(fromItem) },
   { id: "talks", label: ui.talks, rows: byKind("talk") },
-  { id: "communities", label: ui.communities, rows: byKind("community") },
+  { id: "communities", label: ui.communities, rows: [...byKind("community"), ...training.map(fromEntry)] },
   { id: "projects", label: ui.projects, rows: projects.map(fromEntry) },
 ].filter((s) => s.rows.length);
 // fetched from Gravatar at build time and served from this site as a small webp
