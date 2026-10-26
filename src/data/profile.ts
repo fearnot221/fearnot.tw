@@ -18,7 +18,7 @@ export interface Entry {
 }
 
 // One organisation; several roles in it share the org line, and `summary` here covers them all.
-// `kind` picks the home page section: work → 工作經歷, talk → 演講或講課, community → 社群
+// `kind` picks the home page section: work → 學經歷 (after the schools), talk → 授課與分享, community → 社群
 export interface Org {
   kind: "work" | "talk" | "community";
   org: T;
@@ -205,6 +205,7 @@ export const education: Entry[] = [
   },
 ];
 
+// courses and programmes attended; shown under 社群 on the home page
 export const training: Entry[] = [
   {
     start: "2024",
